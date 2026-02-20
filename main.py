@@ -18,71 +18,73 @@ CSS = """
 html, body, [class*="css"] {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     background-color: #f0f2f5 !important;
-    color: #1a1d23 !important;
+    color: #111827 !important;
 }
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 .block-container { padding: 32px 40px 60px !important; max-width: 1440px !important; }
 
-/* ── SIDEBAR ── */
+/* ── SIDEBAR (intentionally dark for contrast) ── */
 [data-testid="stSidebar"] {
     background: #1e2433 !important;
     border-right: none !important;
 }
-[data-testid="stSidebar"] * { color: #8b95a8 !important; }
+[data-testid="stSidebar"] * { color: #c1c8d4 !important; }
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3, [data-testid="stSidebar"] strong { color: #f1f5f9 !important; }
 [data-testid="stSidebar"] .stSelectbox > div > div {
-    background: #262d3d !important;
-    border: 1px solid rgba(255,255,255,0.07) !important;
-    color: #e2e8f0 !important;
+    background: #2d3748 !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: #f1f5f9 !important;
     border-radius: 10px !important;
 }
 [data-testid="stSidebar"] .stButton > button {
     width: 100%;
-    background: #262d3d !important;
-    border: 1px solid rgba(255,255,255,0.07) !important;
-    color: #8b95a8 !important;
+    background: #2d3748 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: #c1c8d4 !important;
     border-radius: 10px !important;
     font-size: 13px !important;
     padding: 8px 16px !important;
     transition: all 0.2s !important;
 }
 [data-testid="stSidebar"] .stButton > button:hover {
-    border-color: #3b82f6 !important;
-    color: #3b82f6 !important;
-    background: rgba(59,130,246,0.08) !important;
+    border-color: #60a5fa !important;
+    color: #60a5fa !important;
+    background: rgba(59,130,246,0.1) !important;
 }
 
 /* ── METRICS ── */
 [data-testid="metric-container"] {
     background: #ffffff !important;
-    border: 1px solid #e8ecf0 !important;
+    border: 1px solid #e2e8f0 !important;
     border-radius: 16px !important;
     padding: 22px !important;
     transition: all 0.2s !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
 }
 [data-testid="metric-container"]:hover {
-    border-color: #c7d2fe !important;
+    border-color: #93c5fd !important;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
 }
 [data-testid="stMetricLabel"] {
-    color: #64748b !important;
+    color: #4b5563 !important;
     font-size: 11px !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.09em !important;
 }
 [data-testid="stMetricValue"] {
-    color: #0f172a !important;
+    color: #111827 !important;
     font-family: 'Playfair Display', serif !important;
     font-size: 34px !important;
 }
-[data-testid="stMetricDelta"] { font-size: 12px !important; }
+[data-testid="stMetricDelta"] { font-size: 12px !important; font-weight: 600 !important; }
 
 /* ── TABS ── */
 [data-testid="stTabs"] [role="tablist"] {
-    background: #e8ecf0 !important;
+    background: #e5e9ef !important;
     border-radius: 12px !important;
     border: none !important;
     padding: 4px !important;
@@ -91,14 +93,14 @@ html, body, [class*="css"] {
 [data-testid="stTabs"] [role="tab"] {
     border-radius: 9px !important;
     font-size: 13px !important;
-    font-weight: 500 !important;
-    color: #64748b !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
     padding: 7px 18px !important;
     border: none !important;
 }
 [data-testid="stTabs"] [role="tab"][aria-selected="true"] {
     background: #ffffff !important;
-    color: #3b82f6 !important;
+    color: #2563eb !important;
     border: none !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.12) !important;
 }
@@ -110,30 +112,32 @@ html, body, [class*="css"] {
 [data-testid="stTextArea"] textarea,
 [data-testid="stDateInput"] input {
     background: #ffffff !important;
-    border: 1.5px solid #e2e8f0 !important;
+    border: 1.5px solid #d1d5db !important;
     border-radius: 10px !important;
-    color: #0f172a !important;
+    color: #111827 !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
     border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
 }
 [data-testid="stSelectbox"] > div > div,
 [data-testid="stMultiSelect"] > div > div {
     background: #ffffff !important;
-    border: 1.5px solid #e2e8f0 !important;
+    border: 1.5px solid #d1d5db !important;
     border-radius: 10px !important;
-    color: #0f172a !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+    color: #111827 !important;
 }
-label { color: #64748b !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 0.02em !important; }
+/* Form labels - dark enough to read */
+label { color: #374151 !important; font-size: 12px !important; font-weight: 600 !important; }
+/* Selectbox dropdown text */
+[data-testid="stSelectbox"] * { color: #111827 !important; }
+[data-testid="stMultiSelect"] * { color: #111827 !important; }
 
 /* ── BUTTONS ── */
 .stButton > button {
-    background: #3b82f6 !important;
+    background: #2563eb !important;
     border: none !important;
     border-radius: 10px !important;
     color: #ffffff !important;
@@ -141,21 +145,19 @@ label { color: #64748b !important; font-size: 12px !important; font-weight: 600 
     font-size: 13px !important;
     padding: 10px 22px !important;
     transition: all 0.2s !important;
-    letter-spacing: 0.01em !important;
-    box-shadow: 0 2px 8px rgba(59,130,246,0.3) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.35) !important;
 }
 .stButton > button:hover {
-    background: #2563eb !important;
+    background: #1d4ed8 !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 6px 16px rgba(59,130,246,0.4) !important;
+    box-shadow: 0 6px 16px rgba(37,99,235,0.45) !important;
 }
 .danger-btn .stButton > button {
-    background: #ef4444 !important;
-    box-shadow: 0 2px 8px rgba(239,68,68,0.3) !important;
+    background: #dc2626 !important;
+    box-shadow: 0 2px 8px rgba(220,38,38,0.35) !important;
 }
 .danger-btn .stButton > button:hover {
-    background: #dc2626 !important;
-    box-shadow: 0 6px 16px rgba(239,68,68,0.4) !important;
+    background: #b91c1c !important;
 }
 
 /* ── EXPANDER ── */
@@ -165,16 +167,18 @@ label { color: #64748b !important; font-size: 12px !important; font-weight: 600 
     border-radius: 14px !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
-[data-testid="stExpander"] summary { color: #475569 !important; font-size: 13px !important; font-weight: 600 !important; }
+[data-testid="stExpander"] summary { color: #1f2937 !important; font-size: 13px !important; font-weight: 600 !important; }
+[data-testid="stExpander"] summary:hover { color: #2563eb !important; }
 
 /* ── ALERTS ── */
 [data-testid="stAlert"] { border-radius: 12px !important; }
+[data-testid="stAlert"] p { color: #1f2937 !important; font-weight: 500 !important; }
 
 /* ── DOWNLOAD BUTTON ── */
 [data-testid="stDownloadButton"] > button {
-    background: #f1f5f9 !important;
-    border: 1.5px solid #e2e8f0 !important;
-    color: #475569 !important;
+    background: #f9fafb !important;
+    border: 1.5px solid #d1d5db !important;
+    color: #374151 !important;
     border-radius: 10px !important;
     font-size: 12px !important;
     padding: 7px 16px !important;
@@ -182,16 +186,17 @@ label { color: #64748b !important; font-size: 12px !important; font-weight: 600 
     box-shadow: none !important;
 }
 [data-testid="stDownloadButton"] > button:hover {
-    border-color: #3b82f6 !important;
-    color: #3b82f6 !important;
+    border-color: #2563eb !important;
+    color: #2563eb !important;
     background: #eff6ff !important;
 }
 
-/* ── TAGS ── */
+/* ── MULTISELECT TAGS ── */
 [data-testid="stMultiSelect"] span[data-baseweb="tag"] {
-    background: #eff6ff !important;
-    color: #3b82f6 !important;
+    background: #dbeafe !important;
+    color: #1d4ed8 !important;
     border-radius: 6px !important;
+    font-weight: 600 !important;
 }
 
 /* ── DATAFRAME ── */
@@ -202,10 +207,20 @@ label { color: #64748b !important; font-size: 12px !important; font-weight: 600 
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
 
+/* ── RADIO / CHECKBOX ── */
+[data-testid="stRadio"] label, [data-testid="stCheckbox"] label { color: #1f2937 !important; }
+
+/* ── MARKDOWN TEXT ── */
+.stMarkdown p, .stMarkdown li { color: #1f2937 !important; }
+
+/* ── NUMBER INPUT ── */
+[data-testid="stNumberInput"] * { color: #111827 !important; }
+[data-testid="stDateInput"] * { color: #111827 !important; }
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 10px; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
@@ -329,9 +344,9 @@ def add_notif(msg, t="info"):
     st.session_state.notifs = st.session_state.notifs[:15]
 
 # ── CONSTANTS ────────────────────────────────────────────────────────────────
-COLORS = ["#0ea472","#3b82f6","#f59e0b","#ef4444","#a855f7","#14b8a6","#f97316","#ec4899"]
+COLORS = ["#059669","#3b82f6","#f59e0b","#ef4444","#a855f7","#14b8a6","#f97316","#ec4899"]
 PL = dict(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",
-          font=dict(family="Outfit",color="#6b7280",size=12),
+          font=dict(family="Plus Jakarta Sans",color="#374151",size=12),
           margin=dict(t=44,b=20,l=10,r=10),
           legend=dict(bgcolor="rgba(255,255,255,0.8)",bordercolor="#e5e7eb"))
 STATUSES = ["Operational","Maintenance Required","Out of Service","Retired"]
@@ -356,26 +371,26 @@ def maintenance_alerts():
 
 def section_header(eye, title, sub=""):
     st.markdown(f"""<div style="margin-bottom:24px;animation:fadeUp .35s ease both">
-      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#0ea472;font-family:\'DM Mono\',monospace;margin-bottom:4px">{eye}</div>
-      <div style="font-family:\'DM Serif Display\',serif;font-size:28px;letter-spacing:-.4px;color:#111827;line-height:1.2">{title}</div>
-      {"<div style=\'font-size:13px;color:#64748b;margin-top:6px\'>"  + sub + "</div>" if sub else ""}
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;font-family:\'DM Mono\',monospace;margin-bottom:4px">{eye}</div>
+      <div style="font-family:\'Playfair Display\',serif;font-size:28px;letter-spacing:-.4px;color:#111827;line-height:1.2">{title}</div>
+      {"<div style=\'font-size:13px;color:#374151;margin-top:6px\'>"  + sub + "</div>" if sub else ""}
     </div>""", unsafe_allow_html=True)
 
 def pb(p):  # priority badge
-    c,bg = {"High":("#ef4444","rgba(239,68,68,.12)"),"Medium":("#f59e0b","rgba(245,158,11,.12)"),"Low":("#0ea472","rgba(0,229,160,.10)")}.get(p,("#9ca3af","rgba(255,255,255,.05)"))
+    c,bg = {"High":("#ef4444","rgba(239,68,68,.12)"),"Medium":("#f59e0b","rgba(245,158,11,.12)"),"Low":("#059669","rgba(0,229,160,.10)")}.get(p,("#4b5563","rgba(107,114,128,.1)"))
     return f'<span style="background:{bg};color:{c};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">&#9679; {p}</span>'
 
 def sb(s):  # status badge
-    c,bg = {"Open":("#60a5fa","rgba(59,130,246,.12)"),"In Progress":("#f59e0b","rgba(245,158,11,.12)"),"Completed":("#0ea472","rgba(0,229,160,.10)"),"Cancelled":("#6b7280","rgba(255,255,255,.06)")}.get(s,("#9ca3af","rgba(255,255,255,.05)"))
+    c,bg = {"Open":("#2563eb","rgba(59,130,246,.12)"),"In Progress":("#f59e0b","rgba(245,158,11,.12)"),"Completed":("#059669","rgba(16,185,129,.12)"),"Cancelled":("#4b5563","rgba(107,114,128,.12)")}.get(s,("#4b5563","rgba(107,114,128,.1)"))
     return f'<span style="background:{bg};color:{c};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">{s}</span>'
 
 def avb(a):  # availability badge
-    c,bg = {"Available":("#0ea472","rgba(0,229,160,.1)"),"Busy":("#f59e0b","rgba(245,158,11,.1)"),"Off":("#6b7280","rgba(255,255,255,.05)")}.get(a,("#6b7280","rgba(255,255,255,.05)"))
+    c,bg = {"Available":("#059669","rgba(16,185,129,.12)"),"Busy":("#f59e0b","rgba(245,158,11,.1)"),"Off":("#4b5563","rgba(107,114,128,.1)")}.get(a,("#6b7280","rgba(255,255,255,.05)"))
     return f'<span style="background:{bg};color:{c};border-radius:20px;padding:2px 10px;font-size:11px;font-family:DM Mono,monospace">&#9679; {a}</span>'
 
 def td_cell(val, mono=False, muted=False, bold=False, color=None):
     font = "font-family:DM Mono,monospace;" if mono else ""
-    col  = f"color:{color};" if color else ("color:#6b7280;" if muted else ("color:#e8eaf0;" if bold else "color:#9ca3af;"))
+    col  = f"color:{color};" if color else ("color:#374151;" if muted else ("color:#111827;" if bold else "color:#111827;"))
     fw   = "font-weight:600;" if bold else ""
     return f'<td style="padding:12px 14px;font-size:12.5px;{font}{col}{fw}border-bottom:1px solid #f3f4f6">{val}</td>'
 
@@ -383,7 +398,7 @@ def badge_cell(badge_html):
     return f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6">{badge_html}</td>'
 
 def make_table(headers, rows):
-    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
+    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#111827;font-weight:700;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
     return f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f9fafb">{ths}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 def to_csv(data_list, fields):
@@ -396,7 +411,7 @@ def to_csv(data_list, fields):
 
 def stock_bar(qty, reorder):
     pct = min(100, int(qty/max(reorder*2,1)*100))
-    c = "#0ea472" if pct>60 else ("#f59e0b" if pct>30 else "#ef4444")
+    c = "#059669" if pct>60 else ("#f59e0b" if pct>30 else "#ef4444")
     return f'<div style="height:4px;background:#e5e7eb;border-radius:4px"><div style="height:100%;width:{pct}%;background:{c};border-radius:4px"></div></div>', c
 
 # ── DASHBOARD ────────────────────────────────────────────────────────────────
@@ -421,7 +436,7 @@ def page_dashboard():
 
     alerts = maintenance_alerts()
     if alerts:
-        st.markdown('<div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maintenance Alerts</div>',unsafe_allow_html=True)
+        st.markdown('<div style="font-size:11px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maintenance Alerts</div>',unsafe_allow_html=True)
         for typ, name, sub in alerts:
             if typ=="overdue": st.error(f"\U0001f534 **OVERDUE: {name}** — {sub}")
             elif typ=="urgent": st.warning(f"\U0001f7e1 **URGENT: {name}** — {sub}")
@@ -433,7 +448,7 @@ def page_dashboard():
         weeks = [f"Wk{i}" for i in range(1,9)]
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=weeks,y=[3,2,4,2,3,4,3,open_wo],name="Opened",line=dict(color="#3b82f6",width=2.5),fill="tozeroy",fillcolor="rgba(59,130,246,.07)"))
-        fig.add_trace(go.Scatter(x=weeks,y=[2,3,1,4,2,3,2,int(done_pct/10)],name="Closed",line=dict(color="#0ea472",width=2.5),fill="tozeroy",fillcolor="rgba(0,229,160,.07)"))
+        fig.add_trace(go.Scatter(x=weeks,y=[2,3,1,4,2,3,2,int(done_pct/10)],name="Closed",line=dict(color="#059669",width=2.5),fill="tozeroy",fillcolor="rgba(0,229,160,.07)"))
         fig.update_layout(**PL,title="Work Order Trend",title_font=dict(size=13,color="#111827"),height=200,xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"))
         st.plotly_chart(fig,use_container_width=True)
     with c2:
@@ -441,12 +456,12 @@ def page_dashboard():
         bdf = pd.DataFrame([{"Cat":b.category[:4],"Alloc":b.allocated,"Spent":b.spent} for b in mb])
         fig2 = go.Figure()
         fig2.add_trace(go.Bar(name="Budget",x=bdf["Cat"],y=bdf["Alloc"],marker_color="rgba(59,130,246,.35)"))
-        fig2.add_trace(go.Bar(name="Spent",x=bdf["Cat"],y=bdf["Spent"],marker_color="#0ea472"))
+        fig2.add_trace(go.Bar(name="Spent",x=bdf["Cat"],y=bdf["Spent"],marker_color="#059669"))
         fig2.update_layout(**PL,title="Feb Budget vs Spend",title_font=dict(size=13,color="#111827"),barmode="overlay",height=200,xaxis=dict(gridcolor="rgba(0,0,0,.06)",tickfont=dict(size=10)),yaxis=dict(gridcolor="rgba(0,0,0,.06)"))
         st.plotly_chart(fig2,use_container_width=True)
     with c3:
         sc = pd.DataFrame([{"s":a.status} for a in st.session_state.assets]).groupby("s").size().reset_index(name="n")
-        fig3 = px.pie(sc,values="n",names="s",color_discrete_sequence=["#0ea472","#f59e0b","#ef4444","#6b7280"],hole=0.6)
+        fig3 = px.pie(sc,values="n",names="s",color_discrete_sequence=["#059669","#f59e0b","#ef4444","#6b7280"],hole=0.6)
         fig3.update_layout(**PL,title="Assets",title_font=dict(size=13,color="#111827"),height=200,showlegend=False)
         fig3.update_traces(textinfo="none")
         st.plotly_chart(fig3,use_container_width=True)
@@ -479,12 +494,12 @@ def page_assets():
         if q:  data=[a for a in data if q in a.name.lower() or q in a.type.lower() or q in a.location.lower() or q in a.manufacturer.lower()]
         if sf: data=[a for a in data if a.status in sf]
         if tf: data=[a for a in data if a.type in tf]
-        sc_map = {"Operational":"#0ea472","Maintenance Required":"#f59e0b","Out of Service":"#ef4444","Retired":"#6b7280"}
+        sc_map = {"Operational":"#059669","Maintenance Required":"#f59e0b","Out of Service":"#ef4444","Retired":"#6b7280"}
         sbg_map = {"Operational":"rgba(0,229,160,.1)","Maintenance Required":"rgba(245,158,11,.1)","Out of Service":"rgba(239,68,68,.1)","Retired":"rgba(255,255,255,.05)"}
         rows=[]
         for a in data:
             spill=f'<span style="background:{sbg_map.get(a.status,"")};color:{sc_map.get(a.status,"#9ca3af")};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace">{a.status}</span>'
-            rows.append(f"<tr>{td_cell(a.id,mono=True,muted=True)}{td_cell(a.name,bold=True)}{td_cell(a.type)}{td_cell(a.location,muted=True)}{badge_cell(spill)}{td_cell(f'${a.purchase_cost:,.0f}' if a.purchase_cost else '—',mono=True,color='#0ea472')}{td_cell(a.last_maintenance,mono=True,muted=True)}{td_cell(a.next_maintenance,mono=True)}</tr>")
+            rows.append(f"<tr>{td_cell(a.id,mono=True,muted=True)}{td_cell(a.name,bold=True)}{td_cell(a.type)}{td_cell(a.location,muted=True)}{badge_cell(spill)}{td_cell(f'${a.purchase_cost:,.0f}' if a.purchase_cost else '—',mono=True,color='#059669')}{td_cell(a.last_maintenance,mono=True,muted=True)}{td_cell(a.next_maintenance,mono=True)}</tr>")
         st.markdown(make_table(["ID","Name","Type","Location","Status","Cost","Last","Next"],rows),unsafe_allow_html=True)
         c1,_=st.columns([1,5])
         with c1: st.download_button("Export CSV",to_csv(st.session_state.assets,["id","name","type","location","status","purchase_date","last_maintenance","next_maintenance","manufacturer","model","serial_number","warranty_expiry","purchase_cost","notes"]),"assets.csv","text/csv",key="dl_a")
@@ -561,7 +576,7 @@ def page_work_orders():
         if q:  wos=[w for w in wos if q in w.title.lower() or q in w.assigned_to.lower() or q in w.asset_id.lower()]
         if sf: wos=[w for w in wos if w.status in sf]
         if pf: wos=[w for w in wos if w.priority in pf]
-        rows=[f"<tr>{td_cell(w.id,mono=True,muted=True)}{td_cell(w.title,bold=True)}{badge_cell(pb(w.priority))}{badge_cell(sb(w.status))}{td_cell(w.assigned_to)}{td_cell(w.due_date,mono=True,muted=True)}{td_cell(f'{w.estimated_hours}h/{w.actual_hours}h',mono=True,muted=True)}{td_cell(f'${w.cost:.0f}' if w.cost else '—',mono=True,color='#0ea472' if w.cost else None)}</tr>" for w in wos]
+        rows=[f"<tr>{td_cell(w.id,mono=True,muted=True)}{td_cell(w.title,bold=True)}{badge_cell(pb(w.priority))}{badge_cell(sb(w.status))}{td_cell(w.assigned_to)}{td_cell(w.due_date,mono=True,muted=True)}{td_cell(f'{w.estimated_hours}h/{w.actual_hours}h',mono=True,muted=True)}{td_cell(f'${w.cost:.0f}' if w.cost else '—',mono=True,color='#059669' if w.cost else None)}</tr>" for w in wos]
         st.markdown(make_table(["ID","Title","Priority","Status","Assigned","Due","Est/Act","Cost"],rows),unsafe_allow_html=True)
         c1,_=st.columns([1,5])
         with c1: st.download_button("Export CSV",to_csv(st.session_state.work_orders,["id","title","asset_id","priority","status","created_date","due_date","assigned_to","estimated_hours","actual_hours","cost","notes"]),"work_orders.csv","text/csv",key="dl_wo")
@@ -613,7 +628,7 @@ def page_work_orders():
             fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
         with c2:
             pc=pd.DataFrame([{"Priority":w.priority} for w in st.session_state.work_orders]).groupby("Priority").size().reset_index(name="n")
-            fig2=px.pie(pc,values="n",names="Priority",title="By Priority",color_discrete_sequence=["#ef4444","#f59e0b","#0ea472"],hole=0.4)
+            fig2=px.pie(pc,values="n",names="Priority",title="By Priority",color_discrete_sequence=["#ef4444","#f59e0b","#059669"],hole=0.4)
             fig2.update_layout(**PL,title_font=dict(size=13,color="#111827"));st.plotly_chart(fig2,use_container_width=True)
         done=[w for w in st.session_state.work_orders if w.status=="Completed" and w.actual_hours>0]
         if done:
@@ -638,19 +653,19 @@ def page_staff():
         IC={"John Smith":"#059669","Mike Johnson":"#b45309","Sarah Williams":"#1d4ed8","Carlos Reyes":"#7c3aed","Amara Osei":"#be185d"}
         cols=st.columns(3)
         for i,s in enumerate(staff):
-            ic=IC.get(s.name,"#9ca3af"); ini="".join([n[0] for n in s.name.split()][:2])
-            skh="".join(f'<span style="background:#f3f4f6;color:#64748b;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block">{sk}</span>' for sk in s.skills)
+            ic=IC.get(s.name,"#64748b"); ini="".join([n[0] for n in s.name.split()][:2])
+            skh="".join(f'<span style="background:#f3f4f6;color:#374151;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block">{sk}</span>' for sk in s.skills)
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
                     <div style="width:44px;height:44px;border-radius:50%;background:{ic};display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0">{ini}</div>
-                    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#0f172a">{s.name}</div><div style="font-size:11px;color:#6b7280">{s.role} &middot; {s.department}</div></div>
+                    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#111827">{s.name}</div><div style="font-size:11px;color:#6b7280">{s.role} &middot; {s.department}</div></div>
                     <div>{avb(s.availability)}</div>
                   </div>
                   <div style="margin-bottom:12px">{skh}</div>
                   <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid #f3f4f6">
-                    <div><div style="font-size:11px;color:#6b7280">&#128231; {s.email}</div><div style="font-size:11px;color:#64748b;margin-top:2px">&#128222; {s.phone}</div></div>
-                    <div style="font-size:16px;font-family:DM Mono,monospace;color:#0ea472;font-weight:600">${s.hourly_rate}<span style="font-size:11px;color:#6b7280">/hr</span></div>
+                    <div><div style="font-size:11px;color:#374151">&#128231; {s.email}</div><div style="font-size:12px;color:#374151;margin-top:2px">&#128222; {s.phone}</div></div>
+                    <div style="font-size:16px;font-family:DM Mono,monospace;color:#059669;font-weight:600">${s.hourly_rate}<span style="font-size:11px;color:#6b7280">/hr</span></div>
                   </div></div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
             sel=st.selectbox("Select",[s.id for s in st.session_state.staff],format_func=lambda x:next((s.name for s in st.session_state.staff if s.id==x),x),key="sted")
@@ -710,7 +725,7 @@ def page_inventory():
             bar,bc=stock_bar(item.quantity,item.reorder_level)
             flag=' <span style="background:rgba(239,68,68,.12);color:#f87171;border-radius:4px;padding:1px 6px;font-size:10px">LOW</span>' if at_low else ""
             nc=f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6"><div style="font-size:13px;color:#111827;font-weight:500">{item.name}{flag}</div>{bar}</td>'
-            rows.append(f"<tr>{td_cell(item.id,mono=True,muted=True)}{nc}{td_cell(item.category)}{td_cell(str(item.quantity),mono=True,color=bc)}{td_cell(item.unit,muted=True)}{td_cell(str(item.reorder_level),mono=True,muted=True)}{td_cell(item.supplier,muted=True)}{td_cell(f'${item.unit_cost}',mono=True)}{td_cell(f'${item.quantity*item.unit_cost:,.0f}',mono=True,color='#0ea472')}</tr>")
+            rows.append(f"<tr>{td_cell(item.id,mono=True,muted=True)}{nc}{td_cell(item.category)}{td_cell(str(item.quantity),mono=True,color=bc)}{td_cell(item.unit,muted=True)}{td_cell(str(item.reorder_level),mono=True,muted=True)}{td_cell(item.supplier,muted=True)}{td_cell(f'${item.unit_cost}',mono=True)}{td_cell(f'${item.quantity*item.unit_cost:,.0f}',mono=True,color='#059669')}</tr>")
         st.markdown(make_table(["ID","Item","Cat","Qty","Unit","Reorder","Supplier","Unit $","Total"],rows),unsafe_allow_html=True)
         c1,_=st.columns([1,5])
         with c1: st.download_button("Export CSV",to_csv(st.session_state.inventory,["id","name","category","quantity","unit","reorder_level","supplier","unit_cost","location","last_ordered"]),"inventory.csv","text/csv",key="dl_inv")
@@ -773,21 +788,21 @@ def page_vendors():
         cols=st.columns(3)
         for i,v in enumerate(vens):
             ct=datetime.strptime(v.contract_end,"%Y-%m-%d").date(); dl=(ct-today).days
-            ec="#ef4444" if dl<60 else ("#f59e0b" if dl<180 else "#0ea472")
+            ec="#ef4444" if dl<60 else ("#f59e0b" if dl<180 else "#059669")
             el="EXPIRING" if dl<60 else (f"{dl}d left" if dl<180 else f"{dl//30}mo left")
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-                    <div><div style="font-size:14px;font-weight:600;color:#0f172a">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
+                    <div><div style="font-size:14px;font-weight:600;color:#111827">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
                     <div style="color:#f59e0b;font-size:16px">{"&#9733;"*int(v.rating)}{"&#9734;"*(5-int(v.rating))}</div>
                   </div>
-                  <div style="font-size:12px;color:#64748b;margin-bottom:3px">&#128100; {v.contact_name}</div>
-                  <div style="font-size:12px;color:#64748b;margin-bottom:3px">&#128231; {v.email}</div>
-                  <div style="font-size:12px;color:#64748b;margin-bottom:12px">&#128222; {v.phone}</div>
+                  <div style="font-size:12px;color:#111827;margin-bottom:3px">&#128100; {v.contact_name}</div>
+                  <div style="font-size:12px;color:#111827;margin-bottom:3px">&#128231; {v.email}</div>
+                  <div style="font-size:12px;color:#111827;margin-bottom:12px">&#128222; {v.phone}</div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6">
-                    <div style="font-size:11px;color:#6b7280">Ends {v.contract_end}</div>
+                    <div style="font-size:11px;color:#374151">Ends {v.contract_end}</div>
                     <span style="color:{ec};font-size:10px;font-family:DM Mono,monospace">{el}</span>
-                  </div>{("<div style=\'font-size:11px;color:#64748b;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
+                  </div>{("<div style=\'font-size:11px;color:#374151;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
                 </div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
             sel=st.selectbox("Vendor",[v.id for v in st.session_state.vendors],format_func=lambda x:next((v.name for v in st.session_state.vendors if v.id==x),x),key="vned")
@@ -843,12 +858,12 @@ def page_budgets():
     with c1:
         brows=""
         for b in sorted(mb,key=lambda x:x.spent,reverse=True):
-            pct=min(100,b.spent/max(b.allocated,1)*100); bc="#0ea472" if pct<80 else ("#f59e0b" if pct<100 else "#ef4444")
+            pct=min(100,b.spent/max(b.allocated,1)*100); bc="#059669" if pct<80 else ("#f59e0b" if pct<100 else "#ef4444")
             over=" <span style=\'color:#ef4444;font-size:10px\'>OVER</span>" if pct>=100 else ""
             brows+=f'''<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:8px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#0f172a">{b.category}{over}</div><div style="font-size:11px;font-family:DM Mono,monospace;color:#64748b">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#111827">{b.category}{over}</div><div style="font-size:12px;font-family:DM Mono,monospace;color:#111827">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
               <div style="height:5px;background:#e5e7eb;border-radius:4px"><div style="height:100%;width:{min(pct,100):.0f}%;background:{bc};border-radius:4px"></div></div>
-              <div style="font-size:10px;color:#64748b;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
+              <div style="font-size:10px;color:#374151;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
         st.markdown(f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px">{brows}</div>',unsafe_allow_html=True)
     with c2:
         td_=[]; 
@@ -859,7 +874,7 @@ def page_budgets():
             tdf=pd.DataFrame(td_)
             fig=go.Figure()
             fig.add_trace(go.Bar(name="Budget",x=tdf["Month"],y=tdf["Allocated"],marker_color="rgba(59,130,246,.35)"))
-            fig.add_trace(go.Bar(name="Spent",x=tdf["Month"],y=tdf["Spent"],marker_color="#0ea472"))
+            fig.add_trace(go.Bar(name="Spent",x=tdf["Month"],y=tdf["Spent"],marker_color="#059669"))
             fig.update_layout(**PL,title="6-Month Trend",title_font=dict(size=13,color="#111827"),barmode="overlay",xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"))
             st.plotly_chart(fig,use_container_width=True)
         fig2=px.pie(pd.DataFrame([{"Cat":b.category,"Spent":b.spent} for b in mb]),values="Spent",names="Cat",title=f"{sm} Spend by Category",color_discrete_sequence=COLORS,hole=0.4)
@@ -904,11 +919,11 @@ def page_reports():
         acd={}
         for w in st.session_state.work_orders: acd[w.asset_id]=acd.get(w.asset_id,0)+w.cost
         df=pd.DataFrame([{"Asset":k,"Cost":v} for k,v in acd.items()])
-        fig=px.bar(df,x="Asset",y="Cost",title="Cost by Asset",color="Cost",color_continuous_scale=["#111318","#0ea472"])
+        fig=px.bar(df,x="Asset",y="Cost",title="Cost by Asset",color="Cost",color_continuous_scale=["#111318","#059669"])
         fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
     elif rtype=="Asset Performance":
         df=pd.DataFrame([{"Asset":a.name[:22],"Days":(datetime.now().date()-datetime.strptime(a.last_maintenance,"%Y-%m-%d").date()).days,"Status":a.status} for a in st.session_state.assets])
-        fig=px.bar(df,x="Asset",y="Days",title="Days Since Last Maintenance",color="Status",color_discrete_map={"Operational":"#0ea472","Maintenance Required":"#f59e0b","Out of Service":"#ef4444","Retired":"#6b7280"})
+        fig=px.bar(df,x="Asset",y="Days",title="Days Since Last Maintenance",color="Status",color_discrete_map={"Operational":"#059669","Maintenance Required":"#f59e0b","Out of Service":"#ef4444","Retired":"#6b7280"})
         fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
     elif rtype=="Staff Utilisation":
         util=[{"Name":s.name,"Role":s.role,"WOs":len([w for w in st.session_state.work_orders if w.assigned_to==s.name]),"Hours":sum(w.actual_hours for w in st.session_state.work_orders if w.assigned_to==s.name),"Cost":f"${sum(w.actual_hours for w in st.session_state.work_orders if w.assigned_to==s.name)*s.hourly_rate:,.0f}","Rate":f"${s.hourly_rate}/hr","Status":s.availability} for s in st.session_state.staff]
@@ -922,18 +937,18 @@ def sidebar():
     with st.sidebar:
         st.markdown('''<div style="padding:4px 4px 20px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-            <div style="width:32px;height:32px;background:linear-gradient(135deg,#0ea472,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">&#127962;</div>
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#059669,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">&#127962;</div>
             <span style="font-family:'DM Serif Display',serif;font-size:20px;color:#111827!important">FacilityOS</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;margin-left:42px">
-            <div style="width:6px;height:6px;border-radius:50%;background:#0ea472;box-shadow:0 0 6px #0ea472;animation:pulse 2s infinite"></div>
-            <span style="font-size:11px;color:#64748b;font-family:'DM Mono',monospace;color:#8b95a8">v3.0 &middot; Online</span>
+            <div style="width:6px;height:6px;border-radius:50%;background:#059669;box-shadow:0 0 6px #059669;animation:pulse 2s infinite"></div>
+            <span style="font-size:11px;font-family:'DM Mono',monospace;color:#8b95a8">v3.0 &middot; Online</span>
           </div></div>''',unsafe_allow_html=True)
         page=st.selectbox("Nav",["Dashboard","Assets","Work Orders","Staff","Inventory","Vendors","Budget","Reports"],label_visibility="collapsed")
         st.markdown("---")
         alerts=maintenance_alerts()
         if alerts:
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#374151;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
             for typ,name,sub in alerts[:5]:
                 short=name[:20]
                 if typ=="overdue": st.error(f"**OVR** {short}")
@@ -945,19 +960,19 @@ def sidebar():
         ow=sum(1 for w in st.session_state.work_orders if w.status in ("Open","In Progress"))
         li=sum(1 for i in st.session_state.inventory if i.quantity<=i.reorder_level)
         st.markdown(f'''<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#0ea472"};margin-top:2px">{ow}</div></div>
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#0ea472"};margin-top:2px">{li}</div></div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#059669"};margin-top:2px">{ow}</div></div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#059669"};margin-top:2px">{li}</div></div>
         </div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#0ea472;margin-top:2px">${iv:,.0f}</div></div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#059669;margin-top:2px">${iv:,.0f}</div></div>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
         if st.session_state.notifs:
             st.markdown("---")
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#374151;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
             for n in st.session_state.notifs[:6]:
                 icon="✅" if n["type"]=="success" else "ℹ️"
-                st.markdown(f'<div style="font-size:11px;color:#64748b;padding:5px 0;border-bottom:1px solid #f3f4f6">{icon} {n["msg"]} <span style="color:#9ca3af;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size:11px;color:#111827;padding:6px 0;border-bottom:1px solid #e5e7eb">{icon} {n["msg"]} <span style="color:#374151;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
         st.markdown("---")
-        st.markdown(f'<div style="font-size:10px;color:#64748b;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size:10px;color:#374151;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
         return page
 
 # ── MAIN ─────────────────────────────────────────────────────────────────────
