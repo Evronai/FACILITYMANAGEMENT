@@ -497,4 +497,319 @@ def page_staff():
                 c1,c2=st.columns(2)
                 with c1:
                     snn=st.text_input("Name",sm.name,key="sen"); snr=st.text_input("Role",sm.role,key="ser")
-                    snd=st.selectbox(
+                    snd=st.selectbox("Dept",DEPARTMENTS,index=DEPARTMENTS.index(sm.department) if sm.department in DEPARTMENTS else 0,key="sed2")
+                with c2:
+                    sne=st.text_input("Email",sm.email,key="see"); snp=st.text_input("Phone",sm.phone,key="sep")
+                    snr2=st.number_input("Rate",15.0,200.0,float(sm.hourly_rate),5.0,key="ser2"); snav=st.selectbox("Availability",AVAIL_LIST,index=AVAIL_LIST.index(sm.availability),key="seav")
+                snsk=st.multiselect("Skills",SKILLS_LIST,default=sm.skills,key="sesk")
+                b1,b2,_=st.columns([1,1,4])
+                with b1:
+                    if st.button("Save",key="sesv"):
+                        sm.name=snn;sm.role=snr;sm.department=snd;sm.email=sne;sm.phone=snp;sm.hourly_rate=snr2;sm.availability=snav;sm.skills=snsk
+                        add_notif(f"'{sm.name}' updated","info");st.success("Saved!");st.rerun()
+                with b2:
+                    st.markdown('<div class="danger-btn">',unsafe_allow_html=True)
+                    if st.button("Delete",key="sedl"):
+                        st.session_state.staff=[s for s in st.session_state.staff if s.id!=sel]
+                        add_notif(f"'{sm.name}' removed");st.success("Deleted.");st.rerun()
+                    st.markdown("</div>",unsafe_allow_html=True)
+        c1,_=st.columns([1,5])
+        with c1: st.download_button("Export CSV",to_csv(st.session_state.staff,["id","name","role","department","email","phone","availability","hourly_rate"]),"staff.csv","text/csv",key="dl_st")
+    with tab2:
+        with st.form("ast"):
+            c1,c2=st.columns(2)
+            with c1:
+                sid=st.text_input("ID",f"STF{len(st.session_state.staff)+1:03d}"); sname=st.text_input("Full Name"); srole=st.text_input("Role"); sdept=st.selectbox("Dept",DEPARTMENTS)
+            with c2:
+                semail=st.text_input("Email"); sphone=st.text_input("Phone"); srate=st.number_input("Rate ($)",15.0,200.0,35.0,5.0); savail=st.selectbox("Availability",AVAIL_LIST)
+            sskills=st.multiselect("Skills",SKILLS_LIST)
+            if st.form_submit_button("Add Member"):
+                if not sname: st.error("Name required")
+                else:
+                    st.session_state.staff.append(Staff(sid,sname,srole,sdept,semail,sphone,sskills,savail,srate))
+                    add_notif(f"'{sname}' added","success");st.success("Added!");st.rerun()
+
+# ── INVENTORY ────────────────────────────────────────────────────────────────
+def page_inventory():
+    section_header("Inventory","Inventory Management","Track parts, supplies, stock levels and reorder needs.")
+    tab1,tab2,tab3=st.tabs(["Stock Levels","Add Item","Analytics"])
+    with tab1:
+        low=[i for i in st.session_state.inventory if i.quantity<=i.reorder_level]
+        if low: st.warning(f"\u26a0\ufe0f **{len(low)} item(s)** below reorder level.")
+        c1,c2=st.columns([3,1])
+        q=c1.text_input("",placeholder="Search inventory...",key="invq",label_visibility="collapsed").lower()
+        cf=c2.multiselect("Category",INV_CATS,key="invcf")
+        items=st.session_state.inventory
+        if q: items=[i for i in items if q in i.name.lower() or q in i.category.lower() or q in i.supplier.lower()]
+        if cf: items=[i for i in items if i.category in cf]
+        rows=[]
+        for item in items:
+            at_low=item.quantity<=item.reorder_level
+            bar,bc=stock_bar(item.quantity,item.reorder_level)
+            flag=' <span style="background:rgba(239,68,68,.12);color:#f87171;border-radius:4px;padding:1px 6px;font-size:10px">LOW</span>' if at_low else ""
+            nc=f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6"><div style="font-size:13px;color:#111827;font-weight:500">{item.name}{flag}</div>{bar}</td>'
+            rows.append(f"<tr>{td_cell(item.id,mono=True,muted=True)}{nc}{td_cell(item.category)}{td_cell(str(item.quantity),mono=True,color=bc)}{td_cell(item.unit,muted=True)}{td_cell(str(item.reorder_level),mono=True,muted=True)}{td_cell(item.supplier,muted=True)}{td_cell(f'${item.unit_cost}',mono=True)}{td_cell(f'${item.quantity*item.unit_cost:,.0f}',mono=True,color='#0ea472')}</tr>")
+        st.markdown(make_table(["ID","Item","Cat","Qty","Unit","Reorder","Supplier","Unit $","Total"],rows),unsafe_allow_html=True)
+        c1,_=st.columns([1,5])
+        with c1: st.download_button("Export CSV",to_csv(st.session_state.inventory,["id","name","category","quantity","unit","reorder_level","supplier","unit_cost","location","last_ordered"]),"inventory.csv","text/csv",key="dl_inv")
+        with st.expander("Edit / Restock / Delete"):
+            sel=st.selectbox("Item",[i.id for i in st.session_state.inventory],format_func=lambda x:next((i.name for i in st.session_state.inventory if i.id==x),x),key="ined")
+            inv=next((i for i in st.session_state.inventory if i.id==sel),None)
+            if inv:
+                c1,c2,c3=st.columns(3)
+                nq=c1.number_input("Qty",0,99999,inv.quantity,1,key="ineq"); nrl=c2.number_input("Reorder Lvl",0,99999,inv.reorder_level,1,key="inerl"); nuc=c3.number_input("Unit Cost",0.0,99999.0,float(inv.unit_cost),.5,key="ineuc")
+                ns=st.text_input("Supplier",inv.supplier,key="ines")
+                b1,b2,_=st.columns([1,1,4])
+                with b1:
+                    if st.button("Save",key="inesv"):
+                        inv.quantity=nq;inv.reorder_level=nrl;inv.unit_cost=nuc;inv.supplier=ns
+                        add_notif(f"'{inv.name}' updated","info");st.success("Saved!");st.rerun()
+                with b2:
+                    st.markdown('<div class="danger-btn">',unsafe_allow_html=True)
+                    if st.button("Delete",key="inedl"):
+                        st.session_state.inventory=[i for i in st.session_state.inventory if i.id!=sel]
+                        add_notif(f"'{inv.name}' removed");st.success("Deleted.");st.rerun()
+                    st.markdown("</div>",unsafe_allow_html=True)
+    with tab2:
+        with st.form("ainv"):
+            c1,c2=st.columns(2)
+            with c1:
+                iid=st.text_input("ID",f"INV{len(st.session_state.inventory)+1:03d}"); iname=st.text_input("Name"); icat=st.selectbox("Category",INV_CATS); iqty=st.number_input("Qty",0,99999,0); iunit=st.text_input("Unit")
+            with c2:
+                irl=st.number_input("Reorder Lvl",0,99999,10); isup=st.text_input("Supplier"); iuc=st.number_input("Unit Cost",0.0,99999.0,0.0,.5); iloc=st.text_input("Location")
+            ilo=st.date_input("Last Ordered",datetime.now())
+            if st.form_submit_button("Add Item"):
+                if not iname: st.error("Name required")
+                else:
+                    st.session_state.inventory.append(Inventory(iid,iname,icat,iqty,iunit,irl,isup,iuc,iloc,ilo.strftime("%Y-%m-%d")))
+                    add_notif(f"'{iname}' added","success");st.success("Added!");st.rerun()
+    with tab3:
+        c1,c2=st.columns(2)
+        with c1:
+            df=pd.DataFrame([{"Cat":i.category,"Val":i.quantity*i.unit_cost} for i in st.session_state.inventory]).groupby("Cat").sum().reset_index()
+            fig=px.pie(df,values="Val",names="Cat",title="Value by Category",color_discrete_sequence=COLORS,hole=0.4)
+            fig.update_layout(**PL,title_font=dict(size=13,color="#111827"));st.plotly_chart(fig,use_container_width=True)
+        with c2:
+            df2=pd.DataFrame([{"Item":i.name.split()[0],"Qty":i.quantity,"Reorder":i.reorder_level} for i in st.session_state.inventory])
+            fig2=go.Figure()
+            fig2.add_trace(go.Bar(name="Qty",x=df2["Item"],y=df2["Qty"],marker_color=COLORS[0]))
+            fig2.add_trace(go.Bar(name="Reorder",x=df2["Item"],y=df2["Reorder"],marker_color=COLORS[3]))
+            fig2.update_layout(**PL,title="Stock vs Reorder",barmode="group",title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig2,use_container_width=True)
+
+# ── VENDORS ──────────────────────────────────────────────────────────────────
+def page_vendors():
+    section_header("Vendors","Vendor Management","Track suppliers, contracts, ratings, and contacts.")
+    tab1,tab2=st.tabs(["Directory","Add Vendor"])
+    with tab1:
+        c1,c2=st.columns([3,1])
+        q=c1.text_input("",placeholder="Search vendors...",key="venq",label_visibility="collapsed").lower()
+        cf=c2.multiselect("Category",DEPARTMENTS,key="vencf")
+        vens=st.session_state.vendors
+        if q: vens=[v for v in vens if q in v.name.lower() or q in v.contact_name.lower() or q in v.category.lower()]
+        if cf: vens=[v for v in vens if v.category in cf]
+        today=datetime.now().date()
+        cols=st.columns(3)
+        for i,v in enumerate(vens):
+            ct=datetime.strptime(v.contract_end,"%Y-%m-%d").date(); dl=(ct-today).days
+            ec="#ef4444" if dl<60 else ("#f59e0b" if dl<180 else "#0ea472")
+            el="EXPIRING" if dl<60 else (f"{dl}d left" if dl<180 else f"{dl//30}mo left")
+            with cols[i%3]:
+                st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                    <div><div style="font-size:14px;font-weight:600;color:#e8eaf0">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
+                    <div style="color:#f59e0b;font-size:16px">{"&#9733;"*int(v.rating)}{"&#9734;"*(5-int(v.rating))}</div>
+                  </div>
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:3px">&#128100; {v.contact_name}</div>
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:3px">&#128231; {v.email}</div>
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:12px">&#128222; {v.phone}</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6">
+                    <div style="font-size:11px;color:#6b7280">Ends {v.contract_end}</div>
+                    <span style="color:{ec};font-size:10px;font-family:DM Mono,monospace">{el}</span>
+                  </div>{("<div style=\'font-size:11px;color:#6b7280;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
+                </div>''',unsafe_allow_html=True)
+        with st.expander("Edit / Delete"):
+            sel=st.selectbox("Vendor",[v.id for v in st.session_state.vendors],format_func=lambda x:next((v.name for v in st.session_state.vendors if v.id==x),x),key="vned")
+            vn=next((v for v in st.session_state.vendors if v.id==sel),None)
+            if vn:
+                c1,c2=st.columns(2)
+                with c1:
+                    vnn=st.text_input("Name",vn.name,key="ven"); vnc=st.selectbox("Cat",DEPARTMENTS,index=DEPARTMENTS.index(vn.category) if vn.category in DEPARTMENTS else 0,key="venc")
+                    vncn=st.text_input("Contact",vn.contact_name,key="vencn"); vne=st.text_input("Email",vn.email,key="vene")
+                with c2:
+                    vnp=st.text_input("Phone",vn.phone,key="venp"); vnr=st.number_input("Rating",1.0,5.0,float(vn.rating),.1,key="venr")
+                    vnce=st.date_input("Contract End",datetime.strptime(vn.contract_end,"%Y-%m-%d"),key="vence")
+                vnnt=st.text_area("Notes",vn.notes,key="vennt")
+                b1,b2,_=st.columns([1,1,4])
+                with b1:
+                    if st.button("Save",key="vensv"):
+                        vn.name=vnn;vn.category=vnc;vn.contact_name=vncn;vn.email=vne;vn.phone=vnp;vn.rating=vnr;vn.contract_end=vnce.strftime("%Y-%m-%d");vn.notes=vnnt
+                        add_notif(f"'{vn.name}' updated","info");st.success("Saved!");st.rerun()
+                with b2:
+                    st.markdown('<div class="danger-btn">',unsafe_allow_html=True)
+                    if st.button("Delete",key="vendl"):
+                        st.session_state.vendors=[v for v in st.session_state.vendors if v.id!=sel]
+                        add_notif(f"'{vn.name}' removed");st.success("Deleted.");st.rerun()
+                    st.markdown("</div>",unsafe_allow_html=True)
+        c1,_=st.columns([1,5])
+        with c1: st.download_button("Export CSV",to_csv(st.session_state.vendors,["id","name","category","contact_name","email","phone","address","rating","contract_end","notes"]),"vendors.csv","text/csv",key="dl_ven")
+    with tab2:
+        with st.form("aven"):
+            c1,c2=st.columns(2)
+            with c1:
+                vid=st.text_input("ID",f"VEN{len(st.session_state.vendors)+1:03d}"); vname=st.text_input("Name"); vcat=st.selectbox("Category",DEPARTMENTS); vcn=st.text_input("Contact Name"); vem=st.text_input("Email")
+            with c2:
+                vph=st.text_input("Phone"); vaddr=st.text_input("Address"); vrat=st.number_input("Rating",1.0,5.0,4.0,.1); vce=st.date_input("Contract End",datetime.now()+timedelta(days=365))
+            vnt=st.text_area("Notes")
+            if st.form_submit_button("Add Vendor"):
+                if not vname: st.error("Name required")
+                else:
+                    st.session_state.vendors.append(Vendor(vid,vname,vcat,vcn,vem,vph,vaddr,vrat,vce.strftime("%Y-%m-%d"),vnt))
+                    add_notif(f"Vendor '{vname}' added","success");st.success("Added!");st.rerun()
+
+# ── BUDGETS ──────────────────────────────────────────────────────────────────
+def page_budgets():
+    section_header("Budget","Budget & Cost Tracking","Monitor spend vs. allocation across categories and months.")
+    months={1:"Jan",2:"Feb",3:"Mar",4:"Apr",5:"May",6:"Jun"}
+    sm=st.selectbox("View Month",list(months.values()),index=1)
+    mn={v:k for k,v in months.items()}[sm]
+    mb=[b for b in st.session_state.budgets if b.month==mn]
+    ta=sum(b.allocated for b in mb); ts=sum(b.spent for b in mb); rem=ta-ts; pu=ts/ta*100 if ta else 0
+    c1,c2,c3,c4=st.columns(4)
+    c1.metric("Budget",f"${ta:,.0f}"); c2.metric("Spent",f"${ts:,.0f}",f"{pu:.0f}% used"); c3.metric("Remaining",f"${rem:,.0f}"); c4.metric("Categories",len(mb))
+    st.markdown("<div style='height:14px'></div>",unsafe_allow_html=True)
+    c1,c2=st.columns([2,3])
+    with c1:
+        brows=""
+        for b in sorted(mb,key=lambda x:x.spent,reverse=True):
+            pct=min(100,b.spent/max(b.allocated,1)*100); bc="#0ea472" if pct<80 else ("#f59e0b" if pct<100 else "#ef4444")
+            over=" <span style=\'color:#ef4444;font-size:10px\'>OVER</span>" if pct>=100 else ""
+            brows+=f'''<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:8px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#e8eaf0">{b.category}{over}</div><div style="font-size:11px;font-family:DM Mono,monospace;color:#9ca3af">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
+              <div style="height:5px;background:#e5e7eb;border-radius:4px"><div style="height:100%;width:{min(pct,100):.0f}%;background:{bc};border-radius:4px"></div></div>
+              <div style="font-size:10px;color:#6b7280;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
+        st.markdown(f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px">{brows}</div>',unsafe_allow_html=True)
+    with c2:
+        td_=[]; 
+        for mn2,ml in months.items():
+            mb2=[b for b in st.session_state.budgets if b.month==mn2]
+            if mb2: td_.append({"Month":ml,"Allocated":sum(b.allocated for b in mb2),"Spent":sum(b.spent for b in mb2)})
+        if td_:
+            tdf=pd.DataFrame(td_)
+            fig=go.Figure()
+            fig.add_trace(go.Bar(name="Budget",x=tdf["Month"],y=tdf["Allocated"],marker_color="rgba(59,130,246,.35)"))
+            fig.add_trace(go.Bar(name="Spent",x=tdf["Month"],y=tdf["Spent"],marker_color="#0ea472"))
+            fig.update_layout(**PL,title="6-Month Trend",title_font=dict(size=13,color="#111827"),barmode="overlay",xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"))
+            st.plotly_chart(fig,use_container_width=True)
+        fig2=px.pie(pd.DataFrame([{"Cat":b.category,"Spent":b.spent} for b in mb]),values="Spent",names="Cat",title=f"{sm} Spend by Category",color_discrete_sequence=COLORS,hole=0.4)
+        fig2.update_layout(**PL,title_font=dict(size=13,color="#111827"));st.plotly_chart(fig2,use_container_width=True)
+
+# ── REPORTS ──────────────────────────────────────────────────────────────────
+def page_reports():
+    section_header("Analytics","Reports & Analytics","Comprehensive data-driven facility insights.")
+    rtype=st.selectbox("Report",["Executive Summary","Maintenance Report","Cost Analysis","Asset Performance","Staff Utilisation"])
+    if rtype=="Executive Summary":
+        op=sum(1 for a in st.session_state.assets if a.status=="Operational"); tot=len(st.session_state.assets)
+        dp=len([w for w in st.session_state.work_orders if w.status=="Completed"])/max(len(st.session_state.work_orders),1)*100
+        labor=sum(w.actual_hours*next((s.hourly_rate for s in st.session_state.staff if s.name==w.assigned_to),35) for w in st.session_state.work_orders if w.actual_hours>0)
+        c1,c2,c3,c4=st.columns(4)
+        c1.metric("Asset Health",f"{int(op/max(tot,1)*100)}%",f"{op}/{tot} operational"); c2.metric("WO Completion",f"{dp:.0f}%")
+        c3.metric("Inventory Value",f"${sum(i.quantity*i.unit_cost for i in st.session_state.inventory):,.0f}"); c4.metric("Total Labor",f"${labor:,.0f}")
+        c1,c2=st.columns(2)
+        with c1:
+            sc=pd.DataFrame([{"s":a.status} for a in st.session_state.assets]).groupby("s").size().reset_index(name="n")
+            fig=px.pie(sc,values="n",names="s",title="Asset Health",color_discrete_sequence=COLORS,hole=0.4)
+            fig.update_layout(**PL,title_font=dict(size=13,color="#111827"));st.plotly_chart(fig,use_container_width=True)
+        with c2:
+            wsc=pd.DataFrame([{"s":w.status} for w in st.session_state.work_orders]).groupby("s").size().reset_index(name="n")
+            fig2=px.bar(wsc,x="s",y="n",title="Work Orders",color="s",color_discrete_sequence=COLORS)
+            fig2.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig2,use_container_width=True)
+    elif rtype=="Maintenance Report":
+        today=datetime.now().date()
+        for a in st.session_state.assets:
+            d=datetime.strptime(a.next_maintenance,"%Y-%m-%d").date(); diff=(d-today).days
+            if diff<0: st.error(f"\U0001f534 **OVERDUE: {a.name}** — was due {a.next_maintenance}")
+            elif diff<=7: st.warning(f"\U0001f7e1 **URGENT: {a.name}** — due in {diff} days")
+            elif diff<=30: st.info(f"\U0001f535 **{a.name}** — due in {diff} days")
+        done=[w for w in st.session_state.work_orders if w.status=="Completed"]
+        if done:
+            st.markdown('<div style="font-size:14px;font-weight:600;color:#111827;margin:18px 0 10px">Completed Work Orders</div>',unsafe_allow_html=True)
+            st.dataframe(pd.DataFrame([{"WO":w.id,"Title":w.title,"Asset":w.asset_id,"Assigned":w.assigned_to,"Hours":w.actual_hours,"Cost":f"${w.cost:.0f}"} for w in done]),use_container_width=True,hide_index=True)
+    elif rtype=="Cost Analysis":
+        labor=sum(w.actual_hours*next((s.hourly_rate for s in st.session_state.staff if s.name==w.assigned_to),35) for w in st.session_state.work_orders if w.actual_hours>0)
+        parts=sum(w.cost for w in st.session_state.work_orders); inv_v=sum(i.quantity*i.unit_cost for i in st.session_state.inventory)
+        c1,c2,c3=st.columns(3)
+        c1.metric("Labor",f"${labor:,.2f}"); c2.metric("Parts",f"${parts:,.2f}"); c3.metric("Inventory",f"${inv_v:,.2f}")
+        acd={}
+        for w in st.session_state.work_orders: acd[w.asset_id]=acd.get(w.asset_id,0)+w.cost
+        df=pd.DataFrame([{"Asset":k,"Cost":v} for k,v in acd.items()])
+        fig=px.bar(df,x="Asset",y="Cost",title="Cost by Asset",color="Cost",color_continuous_scale=["#111318","#0ea472"])
+        fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
+    elif rtype=="Asset Performance":
+        df=pd.DataFrame([{"Asset":a.name[:22],"Days":(datetime.now().date()-datetime.strptime(a.last_maintenance,"%Y-%m-%d").date()).days,"Status":a.status} for a in st.session_state.assets])
+        fig=px.bar(df,x="Asset",y="Days",title="Days Since Last Maintenance",color="Status",color_discrete_map={"Operational":"#0ea472","Maintenance Required":"#f59e0b","Out of Service":"#ef4444","Retired":"#6b7280"})
+        fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
+    elif rtype=="Staff Utilisation":
+        util=[{"Name":s.name,"Role":s.role,"WOs":len([w for w in st.session_state.work_orders if w.assigned_to==s.name]),"Hours":sum(w.actual_hours for w in st.session_state.work_orders if w.assigned_to==s.name),"Cost":f"${sum(w.actual_hours for w in st.session_state.work_orders if w.assigned_to==s.name)*s.hourly_rate:,.0f}","Rate":f"${s.hourly_rate}/hr","Status":s.availability} for s in st.session_state.staff]
+        st.dataframe(pd.DataFrame(util),use_container_width=True,hide_index=True)
+        hdf=pd.DataFrame([{"Name":s.name,"Hours":sum(w.actual_hours for w in st.session_state.work_orders if w.assigned_to==s.name)} for s in st.session_state.staff])
+        fig=px.bar(hdf,x="Name",y="Hours",title="Hours by Technician",color="Name",color_discrete_sequence=COLORS)
+        fig.update_layout(**PL,title_font=dict(size=13,color="#111827"),xaxis=dict(gridcolor="rgba(0,0,0,.06)"),yaxis=dict(gridcolor="rgba(0,0,0,.06)"));st.plotly_chart(fig,use_container_width=True)
+
+# ── SIDEBAR ──────────────────────────────────────────────────────────────────
+def sidebar():
+    with st.sidebar:
+        st.markdown('''<div style="padding:4px 4px 20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#0ea472,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">&#127962;</div>
+            <span style="font-family:'DM Serif Display',serif;font-size:20px;color:#111827!important">FacilityOS</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-left:42px">
+            <div style="width:6px;height:6px;border-radius:50%;background:#0ea472;box-shadow:0 0 6px #0ea472;animation:pulse 2s infinite"></div>
+            <span style="font-size:11px;color:#6b7280;font-family:'DM Mono',monospace">v3.0 &middot; Online</span>
+          </div></div>''',unsafe_allow_html=True)
+        page=st.selectbox("Nav",["Dashboard","Assets","Work Orders","Staff","Inventory","Vendors","Budget","Reports"],label_visibility="collapsed")
+        st.markdown("---")
+        alerts=maintenance_alerts()
+        if alerts:
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
+            for typ,name,sub in alerts[:5]:
+                short=name[:20]
+                if typ=="overdue": st.error(f"**OVR** {short}")
+                elif typ=="urgent": st.warning(f"**URG** {short}")
+                else: st.info(f"**UPC** {short}")
+        st.markdown("---")
+        iv=sum(i.quantity*i.unit_cost for i in st.session_state.inventory)
+        av=sum(a.purchase_cost for a in st.session_state.assets)
+        ow=sum(1 for w in st.session_state.work_orders if w.status in ("Open","In Progress"))
+        li=sum(1 for i in st.session_state.inventory if i.quantity<=i.reorder_level)
+        st.markdown(f'''<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#0ea472"};margin-top:2px">{ow}</div></div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#0ea472"};margin-top:2px">{li}</div></div>
+        </div>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#0ea472;margin-top:2px">${iv:,.0f}</div></div>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
+        if st.session_state.notifs:
+            st.markdown("---")
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
+            for n in st.session_state.notifs[:6]:
+                icon="✅" if n["type"]=="success" else "ℹ️"
+                st.markdown(f'<div style="font-size:11px;color:#6b7280;padding:5px 0;border-bottom:1px solid #f3f4f6">{icon} {n["msg"]} <span style="color:#9ca3af;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
+        st.markdown("---")
+        st.markdown(f'<div style="font-size:10px;color:#9ca3af;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
+        return page
+
+# ── MAIN ─────────────────────────────────────────────────────────────────────
+def main():
+    init()
+    page=sidebar()
+    if page=="Dashboard": page_dashboard()
+    elif page=="Assets": page_assets()
+    elif page=="Work Orders": page_work_orders()
+    elif page=="Staff": page_staff()
+    elif page=="Inventory": page_inventory()
+    elif page=="Vendors": page_vendors()
+    elif page=="Budget": page_budgets()
+    elif page=="Reports": page_reports()
+
+if __name__=="__main__":
+    main()
