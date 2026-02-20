@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import List
 import io, csv
 
-st.set_page_config(page_title="FacilityOS", page_icon="\U0001f3e2", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="FacilityOS", page_icon="🏢", layout="wide", initial_sidebar_state="expanded")
 
 CSS = """
 <style>
@@ -24,25 +24,52 @@ html, body, [class*="css"] {
 .stDeployButton { display: none; }
 .block-container { padding: 32px 40px 60px !important; max-width: 1440px !important; }
 
+/* Force light mode */
+@media (prefers-color-scheme: dark) {
+    :root { color-scheme: light; }
+    body { background-color: #f0f2f5 !important; color: #111827 !important; }
+}
+
+/* Text selection visibility */
+::selection {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
 /* ── SIDEBAR (intentionally dark for contrast) ── */
 [data-testid="stSidebar"] {
     background: #1e2433 !important;
     border-right: none !important;
 }
-[data-testid="stSidebar"] * { color: #c1c8d4 !important; }
+[data-testid="stSidebar"] * { 
+    color: #e5e9f0 !important;  /* Brighter text for better visibility */
+}
 [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3, [data-testid="stSidebar"] strong { color: #f1f5f9 !important; }
+[data-testid="stSidebar"] h3, [data-testid="stSidebar"] strong { 
+    color: #ffffff !important;  /* Pure white for headings */
+}
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] .stMarkdown li,
+[data-testid="stSidebar"] .stSelectbox label,
+[data-testid="stSidebar"] .stNumberInput label {
+    color: #e5e9f0 !important;  /* Consistent bright text */
+}
 [data-testid="stSidebar"] .stSelectbox > div > div {
     background: #2d3748 !important;
-    border: 1px solid rgba(255,255,255,0.12) !important;
-    color: #f1f5f9 !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    color: #ffffff !important;
     border-radius: 10px !important;
+}
+[data-testid="stSidebar"] input,
+[data-testid="stSidebar"] textarea {
+    color: #111827 !important;
+    background: #ffffff !important;
 }
 [data-testid="stSidebar"] .stButton > button {
     width: 100%;
     background: #2d3748 !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
-    color: #c1c8d4 !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    color: #e5e9f0 !important;
     border-radius: 10px !important;
     font-size: 13px !important;
     padding: 8px 16px !important;
@@ -51,7 +78,7 @@ html, body, [class*="css"] {
 [data-testid="stSidebar"] .stButton > button:hover {
     border-color: #60a5fa !important;
     color: #60a5fa !important;
-    background: rgba(59,130,246,0.1) !important;
+    background: rgba(59,130,246,0.15) !important;
 }
 
 /* ── METRICS ── */
@@ -69,7 +96,7 @@ html, body, [class*="css"] {
     box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
 }
 [data-testid="stMetricLabel"] {
-    color: #4b5563 !important;
+    color: #4b5563 !important;  /* Darker for better contrast */
     font-size: 11px !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
@@ -79,8 +106,13 @@ html, body, [class*="css"] {
     color: #111827 !important;
     font-family: 'Playfair Display', serif !important;
     font-size: 34px !important;
+    font-weight: 700 !important;
 }
-[data-testid="stMetricDelta"] { font-size: 12px !important; font-weight: 600 !important; }
+[data-testid="stMetricDelta"] { 
+    font-size: 12px !important; 
+    font-weight: 600 !important;
+    color: #059669 !important;
+}
 
 /* ── TABS ── */
 [data-testid="stTabs"] [role="tablist"] {
@@ -107,6 +139,16 @@ html, body, [class*="css"] {
 [data-testid="stTabs"] [role="tabpanel"] { padding-top: 20px !important; }
 
 /* ── INPUTS ── */
+label, .stTextInput label, .stNumberInput label, .stDateInput label {
+    color: #1f2937 !important;  /* Darker for better visibility */
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    margin-bottom: 4px !important;
+}
+input::placeholder, textarea::placeholder {
+    color: #6b7280 !important;
+    opacity: 1 !important;
+}
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stTextArea"] textarea,
@@ -129,9 +171,6 @@ html, body, [class*="css"] {
     border-radius: 10px !important;
     color: #111827 !important;
 }
-/* Form labels - dark enough to read */
-label { color: #374151 !important; font-size: 12px !important; font-weight: 600 !important; }
-/* Selectbox dropdown text */
 [data-testid="stSelectbox"] * { color: #111827 !important; }
 [data-testid="stMultiSelect"] * { color: #111827 !important; }
 
@@ -167,12 +206,32 @@ label { color: #374151 !important; font-size: 12px !important; font-weight: 600 
     border-radius: 14px !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
-[data-testid="stExpander"] summary { color: #1f2937 !important; font-size: 13px !important; font-weight: 600 !important; }
+[data-testid="stExpander"] summary { 
+    color: #1f2937 !important; 
+    font-size: 13px !important; 
+    font-weight: 600 !important; 
+}
 [data-testid="stExpander"] summary:hover { color: #2563eb !important; }
 
 /* ── ALERTS ── */
-[data-testid="stAlert"] { border-radius: 12px !important; }
-[data-testid="stAlert"] p { color: #1f2937 !important; font-weight: 500 !important; }
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    border-left: 4px solid !important;
+}
+[data-testid="stAlert"] p {
+    color: #1f2937 !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+}
+.stAlert.st-error [data-testid="stAlert"] p {
+    color: #991b1b !important;
+}
+.stAlert.st-warning [data-testid="stAlert"] p {
+    color: #92400e !important;
+}
+.stAlert.st-info [data-testid="stAlert"] p {
+    color: #1e40af !important;
+}
 
 /* ── DOWNLOAD BUTTON ── */
 [data-testid="stDownloadButton"] > button {
@@ -206,12 +265,23 @@ label { color: #374151 !important; font-size: 12px !important; font-weight: 600 
     overflow: hidden !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
+[data-testid="stDataFrame"] td, 
+[data-testid="stDataFrame"] th {
+    color: #111827 !important;
+}
 
 /* ── RADIO / CHECKBOX ── */
-[data-testid="stRadio"] label, [data-testid="stCheckbox"] label { color: #1f2937 !important; }
+[data-testid="stRadio"] label, 
+[data-testid="stCheckbox"] label { 
+    color: #1f2937 !important; 
+    font-weight: 500 !important;
+}
 
 /* ── MARKDOWN TEXT ── */
-.stMarkdown p, .stMarkdown li { color: #1f2937 !important; }
+.stMarkdown p, .stMarkdown li { 
+    color: #1f2937 !important; 
+    font-size: 13px !important;
+}
 
 /* ── NUMBER INPUT ── */
 [data-testid="stNumberInput"] * { color: #111827 !important; }
@@ -345,10 +415,21 @@ def add_notif(msg, t="info"):
 
 # ── CONSTANTS ────────────────────────────────────────────────────────────────
 COLORS = ["#059669","#3b82f6","#f59e0b","#ef4444","#a855f7","#14b8a6","#f97316","#ec4899"]
-PL = dict(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",
-          font=dict(family="Plus Jakarta Sans",color="#374151",size=12),
-          margin=dict(t=44,b=20,l=10,r=10),
-          legend=dict(bgcolor="rgba(255,255,255,0.8)",bordercolor="#e5e7eb"))
+PL = dict(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font=dict(
+        family="Plus Jakarta Sans",
+        color="#1f2937",  # Darker text for charts
+        size=12
+    ),
+    margin=dict(t=44, b=20, l=10, r=10),
+    legend=dict(
+        bgcolor="rgba(255,255,255,0.9)",
+        bordercolor="#e5e7eb",
+        font=dict(color="#1f2937")
+    )
+)
 STATUSES = ["Operational","Maintenance Required","Out of Service","Retired"]
 ASSET_TYPES = ["HVAC","Elevator","Electrical","Plumbing","Fire Safety"]
 PRIORITIES = ["High","Medium","Low"]
@@ -371,34 +452,47 @@ def maintenance_alerts():
 
 def section_header(eye, title, sub=""):
     st.markdown(f"""<div style="margin-bottom:24px;animation:fadeUp .35s ease both">
-      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;font-family:\'DM Mono\',monospace;margin-bottom:4px">{eye}</div>
-      <div style="font-family:\'Playfair Display\',serif;font-size:28px;letter-spacing:-.4px;color:#111827;line-height:1.2">{title}</div>
-      {"<div style=\'font-size:13px;color:#374151;margin-top:6px\'>"  + sub + "</div>" if sub else ""}
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;font-family:'DM Mono',monospace;margin-bottom:4px">{eye}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:28px;letter-spacing:-.4px;color:#111827;line-height:1.2">{title}</div>
+      {"<div style='font-size:13px;color:#4b5563;margin-top:6px'>"  + sub + "</div>" if sub else ""}
     </div>""", unsafe_allow_html=True)
 
-def pb(p):  # priority badge
-    c,bg = {"High":("#ef4444","rgba(239,68,68,.12)"),"Medium":("#f59e0b","rgba(245,158,11,.12)"),"Low":("#059669","rgba(0,229,160,.10)")}.get(p,("#4b5563","rgba(107,114,128,.1)"))
-    return f'<span style="background:{bg};color:{c};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">&#9679; {p}</span>'
+def pb(p):  # priority badge - improved contrast
+    c,bg = {
+        "High": ("#b91c1c", "rgba(239,68,68,.15)"),  # Darker red
+        "Medium": ("#b45309", "rgba(245,158,11,.15)"),  # Darker orange
+        "Low": ("#065f46", "rgba(0,229,160,.12)")  # Darker green
+    }.get(p, ("#4b5563", "rgba(107,114,128,.1)"))
+    return f'<span style="background:{bg};color:{c};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">● {p}</span>'
 
-def sb(s):  # status badge
-    c,bg = {"Open":("#2563eb","rgba(59,130,246,.12)"),"In Progress":("#f59e0b","rgba(245,158,11,.12)"),"Completed":("#059669","rgba(16,185,129,.12)"),"Cancelled":("#4b5563","rgba(107,114,128,.12)")}.get(s,("#4b5563","rgba(107,114,128,.1)"))
+def sb(s):  # status badge - improved contrast
+    c,bg = {
+        "Open": ("#1e40af", "rgba(59,130,246,.12)"),  # Darker blue
+        "In Progress": ("#b45309", "rgba(245,158,11,.12)"),  # Darker orange
+        "Completed": ("#065f46", "rgba(16,185,129,.12)"),  # Darker green
+        "Cancelled": ("#4b5563", "rgba(107,114,128,.12)")  # Darker gray
+    }.get(s, ("#4b5563", "rgba(107,114,128,.1)"))
     return f'<span style="background:{bg};color:{c};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">{s}</span>'
 
-def avb(a):  # availability badge
-    c,bg = {"Available":("#059669","rgba(16,185,129,.12)"),"Busy":("#f59e0b","rgba(245,158,11,.1)"),"Off":("#4b5563","rgba(107,114,128,.1)")}.get(a,("#6b7280","rgba(255,255,255,.05)"))
-    return f'<span style="background:{bg};color:{c};border-radius:20px;padding:2px 10px;font-size:11px;font-family:DM Mono,monospace">&#9679; {a}</span>'
+def avb(a):  # availability badge - improved contrast
+    c,bg = {
+        "Available": ("#065f46", "rgba(16,185,129,.12)"),  # Darker green
+        "Busy": ("#b45309", "rgba(245,158,11,.1)"),  # Darker orange
+        "Off": ("#4b5563", "rgba(107,114,128,.1)")  # Darker gray
+    }.get(a, ("#6b7280", "rgba(255,255,255,.05)"))
+    return f'<span style="background:{bg};color:{c};border-radius:20px;padding:2px 10px;font-size:11px;font-family:DM Mono,monospace">● {a}</span>'
 
 def td_cell(val, mono=False, muted=False, bold=False, color=None):
     font = "font-family:DM Mono,monospace;" if mono else ""
-    col  = f"color:{color};" if color else ("color:#374151;" if muted else ("color:#111827;" if bold else "color:#111827;"))
-    fw   = "font-weight:600;" if bold else ""
+    col = f"color:{color};" if color else ("color:#4b5563;" if muted else "color:#111827;")  # Darker muted text
+    fw = "font-weight:600;" if bold else ""
     return f'<td style="padding:12px 14px;font-size:12.5px;{font}{col}{fw}border-bottom:1px solid #f3f4f6">{val}</td>'
 
 def badge_cell(badge_html):
     return f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6">{badge_html}</td>'
 
 def make_table(headers, rows):
-    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#111827;font-weight:700;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
+    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1f2937;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
     return f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f9fafb">{ths}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 def to_csv(data_list, fields):
@@ -438,9 +532,9 @@ def page_dashboard():
     if alerts:
         st.markdown('<div style="font-size:11px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maintenance Alerts</div>',unsafe_allow_html=True)
         for typ, name, sub in alerts:
-            if typ=="overdue": st.error(f"\U0001f534 **OVERDUE: {name}** — {sub}")
-            elif typ=="urgent": st.warning(f"\U0001f7e1 **URGENT: {name}** — {sub}")
-            else: st.info(f"\U0001f535 **UPCOMING: {name}** — {sub}")
+            if typ=="overdue": st.error(f"🔴 **OVERDUE: {name}** — {sub}")
+            elif typ=="urgent": st.warning(f"🟡 **URGENT: {name}** — {sub}")
+            else: st.info(f"🔵 **UPCOMING: {name}** — {sub}")
         st.markdown("<div style='height:8px'></div>",unsafe_allow_html=True)
 
     c1,c2,c3 = st.columns([2,2,1])
@@ -477,7 +571,7 @@ def page_dashboard():
         h = '<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05)">'
         for item in st.session_state.inventory:
             bar, _ = stock_bar(item.quantity, item.reorder_level)
-            h += f'<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#111827;font-weight:500">{item.name[:26]}</span><span style="font-size:11px;font-family:DM Mono,monospace;color:#6b7280">{item.quantity} {item.unit}</span></div>{bar}</div>'
+            h += f'<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#111827;font-weight:500">{item.name[:26]}</span><span style="font-size:11px;font-family:DM Mono,monospace;color:#4b5563">{item.quantity} {item.unit}</span></div>{bar}</div>'
         h += "</div>"
         st.markdown(h,unsafe_allow_html=True)
 
@@ -498,7 +592,7 @@ def page_assets():
         sbg_map = {"Operational":"rgba(0,229,160,.1)","Maintenance Required":"rgba(245,158,11,.1)","Out of Service":"rgba(239,68,68,.1)","Retired":"rgba(255,255,255,.05)"}
         rows=[]
         for a in data:
-            spill=f'<span style="background:{sbg_map.get(a.status,"")};color:{sc_map.get(a.status,"#9ca3af")};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace">{a.status}</span>'
+            spill=f'<span style="background:{sbg_map.get(a.status,"")};color:{sc_map.get(a.status,"#9ca3af")};border-radius:20px;padding:3px 10px;font-size:11px;font-family:DM Mono,monospace;font-weight:600">{a.status}</span>'
             rows.append(f"<tr>{td_cell(a.id,mono=True,muted=True)}{td_cell(a.name,bold=True)}{td_cell(a.type)}{td_cell(a.location,muted=True)}{badge_cell(spill)}{td_cell(f'${a.purchase_cost:,.0f}' if a.purchase_cost else '—',mono=True,color='#059669')}{td_cell(a.last_maintenance,mono=True,muted=True)}{td_cell(a.next_maintenance,mono=True)}</tr>")
         st.markdown(make_table(["ID","Name","Type","Location","Status","Cost","Last","Next"],rows),unsafe_allow_html=True)
         c1,_=st.columns([1,5])
@@ -654,19 +748,26 @@ def page_staff():
         cols=st.columns(3)
         for i,s in enumerate(staff):
             ic=IC.get(s.name,"#64748b"); ini="".join([n[0] for n in s.name.split()][:2])
-            skh="".join(f'<span style="background:#f3f4f6;color:#374151;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block">{sk}</span>' for sk in s.skills)
+            skh="".join(f'<span style="background:#f3f4f6;color:#1f2937;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block;font-weight:500">{sk}</span>' for sk in s.skills)
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
                     <div style="width:44px;height:44px;border-radius:50%;background:{ic};display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0">{ini}</div>
-                    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#111827">{s.name}</div><div style="font-size:11px;color:#6b7280">{s.role} &middot; {s.department}</div></div>
+                    <div style="flex:1">
+                        <div style="font-size:14px;font-weight:600;color:#111827">{s.name}</div>
+                        <div style="font-size:11px;color:#4b5563">{s.role} · {s.department}</div>
+                    </div>
                     <div>{avb(s.availability)}</div>
                   </div>
                   <div style="margin-bottom:12px">{skh}</div>
                   <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid #f3f4f6">
-                    <div><div style="font-size:11px;color:#374151">&#128231; {s.email}</div><div style="font-size:12px;color:#374151;margin-top:2px">&#128222; {s.phone}</div></div>
-                    <div style="font-size:16px;font-family:DM Mono,monospace;color:#059669;font-weight:600">${s.hourly_rate}<span style="font-size:11px;color:#6b7280">/hr</span></div>
-                  </div></div>''',unsafe_allow_html=True)
+                    <div>
+                        <div style="font-size:11px;color:#4b5563">📧 {s.email}</div>
+                        <div style="font-size:12px;color:#374151;margin-top:2px">📞 {s.phone}</div>
+                    </div>
+                    <div style="font-size:16px;font-family:DM Mono,monospace;color:#059669;font-weight:600">${s.hourly_rate}<span style="font-size:11px;color:#4b5563">/hr</span></div>
+                  </div>
+                </div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
             sel=st.selectbox("Select",[s.id for s in st.session_state.staff],format_func=lambda x:next((s.name for s in st.session_state.staff if s.id==x),x),key="sted")
             sm=next((s for s in st.session_state.staff if s.id==sel),None)
@@ -712,7 +813,7 @@ def page_inventory():
     tab1,tab2,tab3=st.tabs(["Stock Levels","Add Item","Analytics"])
     with tab1:
         low=[i for i in st.session_state.inventory if i.quantity<=i.reorder_level]
-        if low: st.warning(f"\u26a0\ufe0f **{len(low)} item(s)** below reorder level.")
+        if low: st.warning(f"⚠️ **{len(low)} item(s)** below reorder level.")
         c1,c2=st.columns([3,1])
         q=c1.text_input("",placeholder="Search inventory...",key="invq",label_visibility="collapsed").lower()
         cf=c2.multiselect("Category",INV_CATS,key="invcf")
@@ -723,7 +824,7 @@ def page_inventory():
         for item in items:
             at_low=item.quantity<=item.reorder_level
             bar,bc=stock_bar(item.quantity,item.reorder_level)
-            flag=' <span style="background:rgba(239,68,68,.12);color:#f87171;border-radius:4px;padding:1px 6px;font-size:10px">LOW</span>' if at_low else ""
+            flag=' <span style="background:rgba(239,68,68,.12);color:#b91c1c;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600">LOW</span>' if at_low else ""
             nc=f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6"><div style="font-size:13px;color:#111827;font-weight:500">{item.name}{flag}</div>{bar}</td>'
             rows.append(f"<tr>{td_cell(item.id,mono=True,muted=True)}{nc}{td_cell(item.category)}{td_cell(str(item.quantity),mono=True,color=bc)}{td_cell(item.unit,muted=True)}{td_cell(str(item.reorder_level),mono=True,muted=True)}{td_cell(item.supplier,muted=True)}{td_cell(f'${item.unit_cost}',mono=True)}{td_cell(f'${item.quantity*item.unit_cost:,.0f}',mono=True,color='#059669')}</tr>")
         st.markdown(make_table(["ID","Item","Cat","Qty","Unit","Reorder","Supplier","Unit $","Total"],rows),unsafe_allow_html=True)
@@ -788,21 +889,21 @@ def page_vendors():
         cols=st.columns(3)
         for i,v in enumerate(vens):
             ct=datetime.strptime(v.contract_end,"%Y-%m-%d").date(); dl=(ct-today).days
-            ec="#ef4444" if dl<60 else ("#f59e0b" if dl<180 else "#059669")
+            ec="#b91c1c" if dl<60 else ("#b45309" if dl<180 else "#065f46")
             el="EXPIRING" if dl<60 else (f"{dl}d left" if dl<180 else f"{dl//30}mo left")
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-                    <div><div style="font-size:14px;font-weight:600;color:#111827">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
-                    <div style="color:#f59e0b;font-size:16px">{"&#9733;"*int(v.rating)}{"&#9734;"*(5-int(v.rating))}</div>
+                    <div><div style="font-size:14px;font-weight:600;color:#111827">{v.name}</div><div style="font-size:11px;color:#4b5563">{v.category}</div></div>
+                    <div style="color:#f59e0b;font-size:16px">{"★"*int(v.rating)}{"☆"*(5-int(v.rating))}</div>
                   </div>
-                  <div style="font-size:12px;color:#111827;margin-bottom:3px">&#128100; {v.contact_name}</div>
-                  <div style="font-size:12px;color:#111827;margin-bottom:3px">&#128231; {v.email}</div>
-                  <div style="font-size:12px;color:#111827;margin-bottom:12px">&#128222; {v.phone}</div>
+                  <div style="font-size:12px;color:#374151;margin-bottom:3px">👤 {v.contact_name}</div>
+                  <div style="font-size:12px;color:#374151;margin-bottom:3px">📧 {v.email}</div>
+                  <div style="font-size:12px;color:#374151;margin-bottom:12px">📞 {v.phone}</div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6">
-                    <div style="font-size:11px;color:#374151">Ends {v.contract_end}</div>
-                    <span style="color:{ec};font-size:10px;font-family:DM Mono,monospace">{el}</span>
-                  </div>{("<div style=\'font-size:11px;color:#374151;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
+                    <div style="font-size:11px;color:#4b5563">Ends {v.contract_end}</div>
+                    <span style="color:{ec};font-size:10px;font-family:DM Mono,monospace;font-weight:600">{el}</span>
+                  </div>{"<div style='font-size:11px;color:#4b5563;margin-top:6px'>" + v.notes + "</div>" if v.notes else ""}
                 </div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
             sel=st.selectbox("Vendor",[v.id for v in st.session_state.vendors],format_func=lambda x:next((v.name for v in st.session_state.vendors if v.id==x),x),key="vned")
@@ -859,11 +960,15 @@ def page_budgets():
         brows=""
         for b in sorted(mb,key=lambda x:x.spent,reverse=True):
             pct=min(100,b.spent/max(b.allocated,1)*100); bc="#059669" if pct<80 else ("#f59e0b" if pct<100 else "#ef4444")
-            over=" <span style=\'color:#ef4444;font-size:10px\'>OVER</span>" if pct>=100 else ""
+            over=" <span style='color:#b91c1c;font-size:10px;font-weight:600'>OVER</span>" if pct>=100 else ""
             brows+=f'''<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:8px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#111827">{b.category}{over}</div><div style="font-size:12px;font-family:DM Mono,monospace;color:#111827">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+                <div style="font-size:13px;font-weight:600;color:#111827">{b.category}{over}</div>
+                <div style="font-size:12px;font-family:DM Mono,monospace;color:#111827">${b.spent:,.0f} / ${b.allocated:,.0f}</div>
+              </div>
               <div style="height:5px;background:#e5e7eb;border-radius:4px"><div style="height:100%;width:{min(pct,100):.0f}%;background:{bc};border-radius:4px"></div></div>
-              <div style="font-size:10px;color:#374151;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
+              <div style="font-size:10px;color:#4b5563;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% · ${max(b.allocated-b.spent,0):,.0f} left</div>
+            </div>'''
         st.markdown(f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px">{brows}</div>',unsafe_allow_html=True)
     with c2:
         td_=[]; 
@@ -904,9 +1009,9 @@ def page_reports():
         today=datetime.now().date()
         for a in st.session_state.assets:
             d=datetime.strptime(a.next_maintenance,"%Y-%m-%d").date(); diff=(d-today).days
-            if diff<0: st.error(f"\U0001f534 **OVERDUE: {a.name}** — was due {a.next_maintenance}")
-            elif diff<=7: st.warning(f"\U0001f7e1 **URGENT: {a.name}** — due in {diff} days")
-            elif diff<=30: st.info(f"\U0001f535 **{a.name}** — due in {diff} days")
+            if diff<0: st.error(f"🔴 **OVERDUE: {a.name}** — was due {a.next_maintenance}")
+            elif diff<=7: st.warning(f"🟡 **URGENT: {a.name}** — due in {diff} days")
+            elif diff<=30: st.info(f"🔵 **{a.name}** — due in {diff} days")
         done=[w for w in st.session_state.work_orders if w.status=="Completed"]
         if done:
             st.markdown('<div style="font-size:14px;font-weight:600;color:#111827;margin:18px 0 10px">Completed Work Orders</div>',unsafe_allow_html=True)
@@ -937,42 +1042,54 @@ def sidebar():
     with st.sidebar:
         st.markdown('''<div style="padding:4px 4px 20px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-            <div style="width:32px;height:32px;background:linear-gradient(135deg,#059669,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">&#127962;</div>
-            <span style="font-family:'DM Serif Display',serif;font-size:20px;color:#111827!important">FacilityOS</span>
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#059669,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">🏢</div>
+            <span style="font-family:'DM Serif Display',serif;font-size:20px;color:#ffffff!important">FacilityOS</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;margin-left:42px">
             <div style="width:6px;height:6px;border-radius:50%;background:#059669;box-shadow:0 0 6px #059669;animation:pulse 2s infinite"></div>
-            <span style="font-size:11px;font-family:'DM Mono',monospace;color:#8b95a8">v3.0 &middot; Online</span>
+            <span style="font-size:11px;font-family:'DM Mono',monospace;color:#9ca3af">v3.0 · Online</span>
           </div></div>''',unsafe_allow_html=True)
         page=st.selectbox("Nav",["Dashboard","Assets","Work Orders","Staff","Inventory","Vendors","Budget","Reports"],label_visibility="collapsed")
         st.markdown("---")
         alerts=maintenance_alerts()
         if alerts:
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#374151;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
             for typ,name,sub in alerts[:5]:
                 short=name[:20]
-                if typ=="overdue": st.error(f"**OVR** {short}")
-                elif typ=="urgent": st.warning(f"**URG** {short}")
-                else: st.info(f"**UPC** {short}")
+                if typ=="overdue": st.error(f"🔴 **OVR** {short}")
+                elif typ=="urgent": st.warning(f"🟡 **URG** {short}")
+                else: st.info(f"🔵 **UPC** {short}")
         st.markdown("---")
         iv=sum(i.quantity*i.unit_cost for i in st.session_state.inventory)
         av=sum(a.purchase_cost for a in st.session_state.assets)
         ow=sum(1 for w in st.session_state.work_orders if w.status in ("Open","In Progress"))
         li=sum(1 for i in st.session_state.inventory if i.quantity<=i.reorder_level)
         st.markdown(f'''<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#059669"};margin-top:2px">{ow}</div></div>
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#059669"};margin-top:2px">{li}</div></div>
+          <div style="background:#2d3748;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px">
+            <div style="font-size:9px;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em">Open WOs</div>
+            <div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#059669"};margin-top:2px">{ow}</div>
+          </div>
+          <div style="background:#2d3748;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px">
+            <div style="font-size:9px;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em">Low Stock</div>
+            <div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#059669"};margin-top:2px">{li}</div>
+          </div>
         </div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#059669;margin-top:2px">${iv:,.0f}</div></div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#374151;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
+        <div style="background:#2d3748;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px;margin-bottom:8px">
+          <div style="font-size:9px;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div>
+          <div style="font-size:17px;font-family:DM Mono,monospace;color:#059669;margin-top:2px">${iv:,.0f}</div>
+        </div>
+        <div style="background:#2d3748;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px">
+          <div style="font-size:9px;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div>
+          <div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div>
+        </div>''',unsafe_allow_html=True)
         if st.session_state.notifs:
             st.markdown("---")
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#374151;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
             for n in st.session_state.notifs[:6]:
                 icon="✅" if n["type"]=="success" else "ℹ️"
-                st.markdown(f'<div style="font-size:11px;color:#111827;padding:6px 0;border-bottom:1px solid #e5e7eb">{icon} {n["msg"]} <span style="color:#374151;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size:11px;color:#e5e9f0;padding:6px 0;border-bottom:1px solid #2d3748">{icon} {n["msg"]} <span style="color:#9ca3af;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
         st.markdown("---")
-        st.markdown(f'<div style="font-size:10px;color:#374151;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size:10px;color:#9ca3af;font-family:DM Mono,monospace">FacilityOS v3.0 · {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
         return page
 
 # ── MAIN ─────────────────────────────────────────────────────────────────────
