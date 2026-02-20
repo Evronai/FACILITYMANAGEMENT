@@ -12,41 +12,203 @@ st.set_page_config(page_title="FacilityOS", page_icon="\U0001f3e2", layout="wide
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
-html,body,[class*="css"]{font-family:'Outfit',sans-serif!important;background-color:#f8f9fb!important;color:#111827!important;}
-#MainMenu,footer,header{visibility:hidden;}
-.stDeployButton{display:none;}
-.block-container{padding:28px 36px 60px!important;max-width:1440px!important;}
-[data-testid="stSidebar"]{background:#ffffff!important;border-right:1px solid #e5e7eb!important;}
-[data-testid="stSidebar"] *{color:#6b7280!important;}
-[data-testid="stSidebar"] .stSelectbox>div>div{background:#f3f4f6!important;border:1px solid #e5e7eb!important;color:#111827!important;border-radius:10px!important;}
-[data-testid="stSidebar"] .stButton>button{width:100%;background:#f3f4f6!important;border:1px solid #e5e7eb!important;color:#6b7280!important;border-radius:10px!important;font-size:13px!important;padding:8px 16px!important;transition:all 0.2s!important;}
-[data-testid="stSidebar"] .stButton>button:hover{border-color:#0ea472!important;color:#0ea472!important;}
-[data-testid="metric-container"]{background:#ffffff!important;border:1px solid #e5e7eb!important;border-radius:14px!important;padding:20px!important;transition:all 0.2s!important;box-shadow:0 1px 3px rgba(0,0,0,.06)!important;}
-[data-testid="metric-container"]:hover{border-color:#d1d5db!important;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)!important;}
-[data-testid="stMetricLabel"]{color:#6b7280!important;font-size:11px!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:0.08em!important;}
-[data-testid="stMetricValue"]{color:#111827!important;font-family:'DM Serif Display',serif!important;font-size:32px!important;}
-[data-testid="stMetricDelta"]{font-size:12px!important;}
-[data-testid="stTabs"] [role="tablist"]{background:#f3f4f6!important;border-radius:12px!important;border:1px solid #e5e7eb!important;padding:4px!important;gap:2px!important;}
-[data-testid="stTabs"] [role="tab"]{border-radius:9px!important;font-size:13px!important;font-weight:500!important;color:#6b7280!important;padding:7px 16px!important;border:none!important;}
-[data-testid="stTabs"] [role="tab"][aria-selected="true"]{background:#ffffff!important;color:#0ea472!important;border:1px solid #d1fae5!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important;}
-[data-testid="stTextInput"] input,[data-testid="stNumberInput"] input,[data-testid="stTextArea"] textarea,[data-testid="stDateInput"] input{background:#ffffff!important;border:1px solid #e5e7eb!important;border-radius:10px!important;color:#111827!important;font-family:'Outfit',sans-serif!important;}
-[data-testid="stTextInput"] input:focus,[data-testid="stTextArea"] textarea:focus{border-color:#0ea472!important;box-shadow:0 0 0 3px rgba(14,164,114,.1)!important;}
-[data-testid="stSelectbox"]>div>div,[data-testid="stMultiSelect"]>div>div{background:#ffffff!important;border:1px solid #e5e7eb!important;border-radius:10px!important;color:#111827!important;}
-label{color:#6b7280!important;font-size:12px!important;font-weight:500!important;}
-.stButton>button{background:linear-gradient(135deg,#0ea472,#059669)!important;border:none!important;border-radius:10px!important;color:#ffffff!important;font-weight:700!important;font-size:13px!important;padding:10px 22px!important;transition:all 0.2s!important;}
-.stButton>button:hover{opacity:.92!important;transform:translateY(-1px)!important;box-shadow:0 8px 20px rgba(14,164,114,.3)!important;}
-.danger-btn .stButton>button{background:linear-gradient(135deg,#ef4444,#dc2626)!important;}
-[data-testid="stExpander"]{background:#ffffff!important;border:1px solid #e5e7eb!important;border-radius:12px!important;box-shadow:0 1px 3px rgba(0,0,0,.04)!important;}
-[data-testid="stExpander"] summary{color:#6b7280!important;font-size:13px!important;font-weight:500!important;}
-[data-testid="stDownloadButton"]>button{background:#f3f4f6!important;border:1px solid #e5e7eb!important;color:#6b7280!important;border-radius:10px!important;font-size:12px!important;padding:7px 16px!important;font-weight:500!important;}
-[data-testid="stDownloadButton"]>button:hover{border-color:#0ea472!important;color:#0ea472!important;}
-[data-testid="stMultiSelect"] span[data-baseweb="tag"]{background:rgba(14,164,114,0.1)!important;color:#0ea472!important;border-radius:6px!important;}
-[data-testid="stDataFrame"]{border:1px solid #e5e7eb!important;border-radius:12px!important;overflow:hidden!important;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:10px;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── BASE ── */
+html, body, [class*="css"] {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background-color: #f0f2f5 !important;
+    color: #1a1d23 !important;
+}
+#MainMenu, footer, header { visibility: hidden; }
+.stDeployButton { display: none; }
+.block-container { padding: 32px 40px 60px !important; max-width: 1440px !important; }
+
+/* ── SIDEBAR ── */
+[data-testid="stSidebar"] {
+    background: #1e2433 !important;
+    border-right: none !important;
+}
+[data-testid="stSidebar"] * { color: #8b95a8 !important; }
+[data-testid="stSidebar"] .stSelectbox > div > div {
+    background: #262d3d !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    color: #e2e8f0 !important;
+    border-radius: 10px !important;
+}
+[data-testid="stSidebar"] .stButton > button {
+    width: 100%;
+    background: #262d3d !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    color: #8b95a8 !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    transition: all 0.2s !important;
+}
+[data-testid="stSidebar"] .stButton > button:hover {
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+    background: rgba(59,130,246,0.08) !important;
+}
+
+/* ── METRICS ── */
+[data-testid="metric-container"] {
+    background: #ffffff !important;
+    border: 1px solid #e8ecf0 !important;
+    border-radius: 16px !important;
+    padding: 22px !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+[data-testid="metric-container"]:hover {
+    border-color: #c7d2fe !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+}
+[data-testid="stMetricLabel"] {
+    color: #64748b !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.09em !important;
+}
+[data-testid="stMetricValue"] {
+    color: #0f172a !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 34px !important;
+}
+[data-testid="stMetricDelta"] { font-size: 12px !important; }
+
+/* ── TABS ── */
+[data-testid="stTabs"] [role="tablist"] {
+    background: #e8ecf0 !important;
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 4px !important;
+    gap: 2px !important;
+}
+[data-testid="stTabs"] [role="tab"] {
+    border-radius: 9px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #64748b !important;
+    padding: 7px 18px !important;
+    border: none !important;
+}
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+    background: #ffffff !important;
+    color: #3b82f6 !important;
+    border: none !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12) !important;
+}
+[data-testid="stTabs"] [role="tabpanel"] { padding-top: 20px !important; }
+
+/* ── INPUTS ── */
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-testid="stDateInput"] input {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    color: #0f172a !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+}
+[data-testid="stTextInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
+}
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stMultiSelect"] > div > div {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+}
+label { color: #64748b !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 0.02em !important; }
+
+/* ── BUTTONS ── */
+.stButton > button {
+    background: #3b82f6 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding: 10px 22px !important;
+    transition: all 0.2s !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.3) !important;
+}
+.stButton > button:hover {
+    background: #2563eb !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(59,130,246,0.4) !important;
+}
+.danger-btn .stButton > button {
+    background: #ef4444 !important;
+    box-shadow: 0 2px 8px rgba(239,68,68,0.3) !important;
+}
+.danger-btn .stButton > button:hover {
+    background: #dc2626 !important;
+    box-shadow: 0 6px 16px rgba(239,68,68,0.4) !important;
+}
+
+/* ── EXPANDER ── */
+[data-testid="stExpander"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+[data-testid="stExpander"] summary { color: #475569 !important; font-size: 13px !important; font-weight: 600 !important; }
+
+/* ── ALERTS ── */
+[data-testid="stAlert"] { border-radius: 12px !important; }
+
+/* ── DOWNLOAD BUTTON ── */
+[data-testid="stDownloadButton"] > button {
+    background: #f1f5f9 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    color: #475569 !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    padding: 7px 16px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+}
+[data-testid="stDownloadButton"] > button:hover {
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+    background: #eff6ff !important;
+}
+
+/* ── TAGS ── */
+[data-testid="stMultiSelect"] span[data-baseweb="tag"] {
+    background: #eff6ff !important;
+    color: #3b82f6 !important;
+    border-radius: 6px !important;
+}
+
+/* ── DATAFRAME ── */
+[data-testid="stDataFrame"] {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 </style>
 """
 st.markdown(CSS, unsafe_allow_html=True)
@@ -196,7 +358,7 @@ def section_header(eye, title, sub=""):
     st.markdown(f"""<div style="margin-bottom:24px;animation:fadeUp .35s ease both">
       <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#0ea472;font-family:\'DM Mono\',monospace;margin-bottom:4px">{eye}</div>
       <div style="font-family:\'DM Serif Display\',serif;font-size:28px;letter-spacing:-.4px;color:#111827;line-height:1.2">{title}</div>
-      {"<div style=\'font-size:13px;color:#6b7280;margin-top:6px\'>"  + sub + "</div>" if sub else ""}
+      {"<div style=\'font-size:13px;color:#64748b;margin-top:6px\'>"  + sub + "</div>" if sub else ""}
     </div>""", unsafe_allow_html=True)
 
 def pb(p):  # priority badge
@@ -221,8 +383,8 @@ def badge_cell(badge_html):
     return f'<td style="padding:12px 14px;border-bottom:1px solid #f3f4f6">{badge_html}</td>'
 
 def make_table(headers, rows):
-    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
-    return f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f9fafb">{ths}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
+    ths = "".join(f'<th style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;text-align:left;white-space:nowrap;background:#f9fafb">{h}</th>' for h in headers)
+    return f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f9fafb">{ths}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 def to_csv(data_list, fields):
     buf = io.StringIO()
@@ -259,7 +421,7 @@ def page_dashboard():
 
     alerts = maintenance_alerts()
     if alerts:
-        st.markdown('<div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maintenance Alerts</div>',unsafe_allow_html=True)
+        st.markdown('<div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maintenance Alerts</div>',unsafe_allow_html=True)
         for typ, name, sub in alerts:
             if typ=="overdue": st.error(f"\U0001f534 **OVERDUE: {name}** — {sub}")
             elif typ=="urgent": st.warning(f"\U0001f7e1 **URGENT: {name}** — {sub}")
@@ -297,7 +459,7 @@ def page_dashboard():
         st.markdown(make_table(["ID","Title","Priority","Status","Who","Due"],rows),unsafe_allow_html=True)
     with cr:
         st.markdown('<div style="font-size:13px;font-weight:600;color:#111827;margin-bottom:8px">Inventory Levels</div>',unsafe_allow_html=True)
-        h = '<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px">'
+        h = '<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05)">'
         for item in st.session_state.inventory:
             bar, _ = stock_bar(item.quantity, item.reorder_level)
             h += f'<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#111827;font-weight:500">{item.name[:26]}</span><span style="font-size:11px;font-family:DM Mono,monospace;color:#6b7280">{item.quantity} {item.unit}</span></div>{bar}</div>'
@@ -477,17 +639,17 @@ def page_staff():
         cols=st.columns(3)
         for i,s in enumerate(staff):
             ic=IC.get(s.name,"#9ca3af"); ini="".join([n[0] for n in s.name.split()][:2])
-            skh="".join(f'<span style="background:#f3f4f6;color:#6b7280;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block">{sk}</span>' for sk in s.skills)
+            skh="".join(f'<span style="background:#f3f4f6;color:#64748b;border-radius:6px;padding:2px 8px;font-size:10px;margin:2px;display:inline-block">{sk}</span>' for sk in s.skills)
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
                     <div style="width:44px;height:44px;border-radius:50%;background:{ic};display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0">{ini}</div>
-                    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#e8eaf0">{s.name}</div><div style="font-size:11px;color:#6b7280">{s.role} &middot; {s.department}</div></div>
+                    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#0f172a">{s.name}</div><div style="font-size:11px;color:#6b7280">{s.role} &middot; {s.department}</div></div>
                     <div>{avb(s.availability)}</div>
                   </div>
                   <div style="margin-bottom:12px">{skh}</div>
                   <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid #f3f4f6">
-                    <div><div style="font-size:11px;color:#6b7280">&#128231; {s.email}</div><div style="font-size:11px;color:#6b7280;margin-top:2px">&#128222; {s.phone}</div></div>
+                    <div><div style="font-size:11px;color:#6b7280">&#128231; {s.email}</div><div style="font-size:11px;color:#64748b;margin-top:2px">&#128222; {s.phone}</div></div>
                     <div style="font-size:16px;font-family:DM Mono,monospace;color:#0ea472;font-weight:600">${s.hourly_rate}<span style="font-size:11px;color:#6b7280">/hr</span></div>
                   </div></div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
@@ -616,16 +778,16 @@ def page_vendors():
             with cols[i%3]:
                 st.markdown(f'''<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px">
                   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-                    <div><div style="font-size:14px;font-weight:600;color:#e8eaf0">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
+                    <div><div style="font-size:14px;font-weight:600;color:#0f172a">{v.name}</div><div style="font-size:11px;color:#6b7280">{v.category}</div></div>
                     <div style="color:#f59e0b;font-size:16px">{"&#9733;"*int(v.rating)}{"&#9734;"*(5-int(v.rating))}</div>
                   </div>
-                  <div style="font-size:12px;color:#6b7280;margin-bottom:3px">&#128100; {v.contact_name}</div>
-                  <div style="font-size:12px;color:#6b7280;margin-bottom:3px">&#128231; {v.email}</div>
-                  <div style="font-size:12px;color:#6b7280;margin-bottom:12px">&#128222; {v.phone}</div>
+                  <div style="font-size:12px;color:#64748b;margin-bottom:3px">&#128100; {v.contact_name}</div>
+                  <div style="font-size:12px;color:#64748b;margin-bottom:3px">&#128231; {v.email}</div>
+                  <div style="font-size:12px;color:#64748b;margin-bottom:12px">&#128222; {v.phone}</div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6">
                     <div style="font-size:11px;color:#6b7280">Ends {v.contract_end}</div>
                     <span style="color:{ec};font-size:10px;font-family:DM Mono,monospace">{el}</span>
-                  </div>{("<div style=\'font-size:11px;color:#6b7280;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
+                  </div>{("<div style=\'font-size:11px;color:#64748b;margin-top:6px\'>" + v.notes + "</div>") if v.notes else ""}
                 </div>''',unsafe_allow_html=True)
         with st.expander("Edit / Delete"):
             sel=st.selectbox("Vendor",[v.id for v in st.session_state.vendors],format_func=lambda x:next((v.name for v in st.session_state.vendors if v.id==x),x),key="vned")
@@ -684,9 +846,9 @@ def page_budgets():
             pct=min(100,b.spent/max(b.allocated,1)*100); bc="#0ea472" if pct<80 else ("#f59e0b" if pct<100 else "#ef4444")
             over=" <span style=\'color:#ef4444;font-size:10px\'>OVER</span>" if pct>=100 else ""
             brows+=f'''<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:8px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#e8eaf0">{b.category}{over}</div><div style="font-size:11px;font-family:DM Mono,monospace;color:#9ca3af">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px"><div style="font-size:13px;font-weight:600;color:#0f172a">{b.category}{over}</div><div style="font-size:11px;font-family:DM Mono,monospace;color:#64748b">${b.spent:,.0f} / ${b.allocated:,.0f}</div></div>
               <div style="height:5px;background:#e5e7eb;border-radius:4px"><div style="height:100%;width:{min(pct,100):.0f}%;background:{bc};border-radius:4px"></div></div>
-              <div style="font-size:10px;color:#6b7280;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
+              <div style="font-size:10px;color:#64748b;margin-top:4px;font-family:DM Mono,monospace">{pct:.0f}% &middot; ${max(b.allocated-b.spent,0):,.0f} left</div></div>'''
         st.markdown(f'<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:16px">{brows}</div>',unsafe_allow_html=True)
     with c2:
         td_=[]; 
@@ -765,13 +927,13 @@ def sidebar():
           </div>
           <div style="display:flex;align-items:center;gap:6px;margin-left:42px">
             <div style="width:6px;height:6px;border-radius:50%;background:#0ea472;box-shadow:0 0 6px #0ea472;animation:pulse 2s infinite"></div>
-            <span style="font-size:11px;color:#6b7280;font-family:'DM Mono',monospace">v3.0 &middot; Online</span>
+            <span style="font-size:11px;color:#64748b;font-family:'DM Mono',monospace;color:#8b95a8">v3.0 &middot; Online</span>
           </div></div>''',unsafe_allow_html=True)
         page=st.selectbox("Nav",["Dashboard","Assets","Work Orders","Staff","Inventory","Vendors","Budget","Reports"],label_visibility="collapsed")
         st.markdown("---")
         alerts=maintenance_alerts()
         if alerts:
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px">Alerts</div>',unsafe_allow_html=True)
             for typ,name,sub in alerts[:5]:
                 short=name[:20]
                 if typ=="overdue": st.error(f"**OVR** {short}")
@@ -783,19 +945,19 @@ def sidebar():
         ow=sum(1 for w in st.session_state.work_orders if w.status in ("Open","In Progress"))
         li=sum(1 for i in st.session_state.inventory if i.quantity<=i.reorder_level)
         st.markdown(f'''<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#0ea472"};margin-top:2px">{ow}</div></div>
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#0ea472"};margin-top:2px">{li}</div></div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Open WOs</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if ow>3 else "#f59e0b" if ow>0 else "#0ea472"};margin-top:2px">{ow}</div></div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Low Stock</div><div style="font-size:20px;font-family:DM Mono,monospace;color:{"#ef4444" if li>0 else "#0ea472"};margin-top:2px">{li}</div></div>
         </div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#0ea472;margin-top:2px">${iv:,.0f}</div></div>
-        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Inventory Value</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#0ea472;margin-top:2px">${iv:,.0f}</div></div>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.08em">Asset Portfolio</div><div style="font-size:17px;font-family:DM Mono,monospace;color:#3b82f6;margin-top:2px">${av/1000:.0f}k</div></div>''',unsafe_allow_html=True)
         if st.session_state.notifs:
             st.markdown("---")
-            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
+            st.markdown('<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px">Activity</div>',unsafe_allow_html=True)
             for n in st.session_state.notifs[:6]:
                 icon="✅" if n["type"]=="success" else "ℹ️"
-                st.markdown(f'<div style="font-size:11px;color:#6b7280;padding:5px 0;border-bottom:1px solid #f3f4f6">{icon} {n["msg"]} <span style="color:#9ca3af;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size:11px;color:#64748b;padding:5px 0;border-bottom:1px solid #f3f4f6">{icon} {n["msg"]} <span style="color:#9ca3af;font-size:10px;font-family:DM Mono,monospace">{n["ts"]}</span></div>',unsafe_allow_html=True)
         st.markdown("---")
-        st.markdown(f'<div style="font-size:10px;color:#9ca3af;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size:10px;color:#64748b;font-family:DM Mono,monospace">FacilityOS v3.0 &middot; {datetime.now().strftime("%b %d, %Y")}</div>',unsafe_allow_html=True)
         return page
 
 # ── MAIN ─────────────────────────────────────────────────────────────────────
